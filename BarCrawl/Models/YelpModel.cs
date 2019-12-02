@@ -1,0 +1,44 @@
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace BarCrawl.Models
+{
+    public class YelpModel
+    {
+       
+
+        public List<string> Categories { get; set; }
+        public string Alias { get; set; }
+        public string Title { get; set; }
+     
+        public string Name { get; set; }
+       
+       
+        public List<string> LocationList { get; set; }
+        public string City { get; set; }
+       
+       
+        public YelpModel()
+        {
+        }
+        public YelpModel(JToken u)
+        {
+           
+            this.Alias = u["alias"].ToString();
+           
+           
+            this.Name = u["name"].ToString();
+           
+            
+            
+                 
+                    
+           
+        }
+    }
+
+}
+
