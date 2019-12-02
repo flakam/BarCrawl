@@ -29,29 +29,12 @@ namespace BarCrawl.Models
            
             this.Alias = u["alias"].ToString();
            
-            this.Categories = new List<string>();
-            if (u["categories"] != null)
-            {
-                foreach (JToken categories in u["categories"].ToList())
-                {
-                    this.Categories.Add(categories.ToString());
-                }
-            }
-            this.Title = u["title"].ToString();
            
             this.Name = u["name"].ToString();
            
             
             
-            this.LocationList = new List<string>();
-            if (u["location"] != null)
-            {
-                foreach (JToken locations in u["location"].ToList())
-                {
-                    this.LocationList.Add(locations.ToString());
-                }
-            }
-            this.City = u["city"].ToString();
+                 
                     
            
         }
