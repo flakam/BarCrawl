@@ -43,42 +43,32 @@ namespace BarCrawl.Controllers
         }
         public IActionResult Start()
         {
-            return View();
-        }
-      /*  public string CallAPI(string location)
-        {
-          
-            HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search+{location}");
+            List<YelpModel> bars = GetBars();
+            LongAndLat a = new LongAndLat();
+            decimal latitude = a.Latitude;
+            decimal longitude = a.Longitude;
+
+            HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location=grand rapids&radius=1000&longitude={longitude}&latitude={latitude}");
+            request.Headers.Add("Authorization", "Bearer 5AZ1TMhzZzb52DbbAMkydLPjNRSURY3x-DtC2o7qDjNTa2n96PSxuLZMmQoBy3WtX5q4EWUh4KQWVG1GG_nq_x2YLEssXjh5WF5kYw8E_VPmyRVMRfDHLwOYM0bXXXYx");
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
             StreamReader rd = new StreamReader(response.GetResponseStream());
-            string APIText = rd.ReadToEnd();
-            return APIText;
+            string ApiText = rd.ReadToEnd();
+            JToken tokens = JToken.Parse(ApiText);
 
+            List<JToken> ts = tokens["businesses"].ToList();
+
+            List<YelpModel> longlat = new List<YelpModel>();
+
+            foreach (JToken t in ts)
+            {
+                YelpModel b = new YelpModel(t);
+                longlat.Add(b);
+            }
+
+            return longlat;
+           
         }
-        public string CallYelp(string term)
-        {
-            HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search+{term}");
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-            StreamReader rd = new StreamReader(response.GetResponseStream());
-            string APIText = rd.ReadToEnd();
-            return APIText;
-
-
-        }
-        public JToken Parseyelp(string text)
-        {
-            JToken output = JToken.Parse(text);
-            return output;
-        }
-        public IActionResult Planet(string location)
-        {
-            string yelpdata = CallAPI(location);
-            JToken t = JToken.Parse(yelpdata);
-            YelpModel p= new YelpModel(t);
-            return View();
-        }*/
+       
         public IActionResult Index()
         {
             return View();
