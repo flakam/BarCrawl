@@ -24,7 +24,7 @@ namespace BarCrawl.Controllers
             string ApiText = rd.ReadToEnd();
             JToken tokens = JToken.Parse(ApiText);
 
-            List<JToken> ts = tokens["results"].ToList();
+            List<JToken> ts = tokens["businesses"].ToList();
 
             List<YelpModel> yelp = new List<YelpModel>();
 
