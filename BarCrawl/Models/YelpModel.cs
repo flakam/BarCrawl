@@ -12,11 +12,12 @@ namespace BarCrawl.Models
 
         public List<string> Categories { get; set; }
         public string Alias { get; set; }
-        public string Title { get; set; }
+        public decimal Longitude { get; set; }
      
         public string Name { get; set; }
-       
-       
+        public decimal Latitude{ get; set; }
+
+
         public List<string> LocationList { get; set; }
         public string City { get; set; }
        
@@ -28,15 +29,14 @@ namespace BarCrawl.Models
         {
            
             this.Alias = u["alias"].ToString();
-           
-           
+                  
             this.Name = u["name"].ToString();
-           
-            
-            
-                 
-                    
-           
+            this.Latitude = decimal.Parse(u["coordinates"]["latitude"].ToString());
+            this.Longitude = decimal.Parse(u["coordinates"]["longitude"].ToString());
+
+
+                                 
+
         }
     }
 
