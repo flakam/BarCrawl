@@ -41,13 +41,8 @@ namespace BarCrawl.Controllers
             List<YelpModel>bars = GetBars();
             return View(bars);
         }
-        public IActionResult Start()
+        public  List<YelpModel> GetLongandLat(decimal longitude,decimal latitude)
         {
-            List<YelpModel> bars = GetBars();
-            LongAndLat a = new LongAndLat();
-            decimal latitude = a.Latitude;
-            decimal longitude = a.Longitude;
-
             HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location=grand rapids&radius=1000&longitude={longitude}&latitude={latitude}");
             request.Headers.Add("Authorization", "Bearer 5AZ1TMhzZzb52DbbAMkydLPjNRSURY3x-DtC2o7qDjNTa2n96PSxuLZMmQoBy3WtX5q4EWUh4KQWVG1GG_nq_x2YLEssXjh5WF5kYw8E_VPmyRVMRfDHLwOYM0bXXXYx");
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -64,9 +59,23 @@ namespace BarCrawl.Controllers
                 YelpModel b = new YelpModel(t);
                 longlat.Add(b);
             }
+            //if(longlat.Contains())
+            //LongAndLat result = new LongAndLat(tokens);
 
             return longlat;
-           
+            
+            
+        }
+        public IActionResult Chosen5(decimal longitude, decimal latitude)
+        {
+            
+            List<YelpModel> bars = GetLongandLat(longitude,latitude);
+            return View(bars);
+        }
+        public IActionResult Start()
+        {
+            
+                return View();
         }
        
         public IActionResult Index()
@@ -77,11 +86,7 @@ namespace BarCrawl.Controllers
         {
             return View();
         }
-       [HttpPost]
-       public IActionResult Search(YelpModel a)
-        {
-            return RedirectToAction("Home", "Result");
-        }
+     
         
         public IActionResult Privacy()
         {
