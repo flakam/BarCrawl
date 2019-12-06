@@ -40,6 +40,10 @@ namespace BarCrawl.Controllers
            
            
         }
+        public IActionResult Identity()
+        {
+            return View();
+        }
         public IActionResult Index()
         {
             return View();
