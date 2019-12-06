@@ -12,7 +12,7 @@ namespace BarCrawl.Models
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
         public decimal ShowLa { get { return Latitude; } }
-        public decimal ShoLo { get { return Longitude; } }
+        public decimal ShowLo { get { return Longitude; } }
 
         public LongAndLat()
         {
