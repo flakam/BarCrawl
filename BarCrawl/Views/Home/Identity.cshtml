@@ -1,26 +1,53 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-
-<ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Identity" title="Manage">Hello @User.Identity.Name!</a>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Identity", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-            </form>
-        </li>
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-        </li>
-    }
-</ul>
+﻿<div class="container">
+    
+    
+    <main role="main" class="pb-3">
+        <h1>Log in</h1>
+        <div class="row">
+            <div class="col-md-4">
+                <section>
+                    <form id="account" method="post" novalidate="novalidate">
+                        
+                        <hr>
+                        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+                            <ul>
+                                <li style="display:none"></li>
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <label for="Input_Email">Email</label>
+                            <input class="form-control" type="email" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="Input_Email" name="Input.Email" value="">
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Input.Email" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Input_Password">Password</label>
+                            <input class="form-control" type="password" data-val="true" data-val-required="The Password field is required." id="Input_Password" name="Input.Password">
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Input.Password" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label for="Input_RememberMe">
+                                    <input type="checkbox" data-val="true" data-val-required="The Remember me? field is required." id="Input_RememberMe" name="Input.RememberMe" value="true">
+                                    Remember me?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Log in</button>
+                        </div>
+                        <div class="form-group">
+                            <p>
+                                <a id="forgot-password" href="/Identity/Account/ForgotPassword">Forgot your password?</a>
+                            </p>
+                            <p>
+                                <a href="/Identity/Account/Register?returnUrl=%2F">Register as a new user</a>
+                            </p>
+                        </div>
+                        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8MHcTOdqZdNCosJm8GhhVWZuROB2jtjy767ZhbowBIdy64Y0540HCBmOK8MJ6ioYm1O4bVAENjocUfULIQV-4vQgfwBdmlHZpQKerGyWYv_y0MezK46BkAbISUeqfxYcCyVMDuxNdGNrpxalcnVc0fY"><input name="Input.RememberMe" type="hidden" value="false">
+                    </form>
+                </section>
+            </div>
+            
+        </div>
+    </main>
+</div>
