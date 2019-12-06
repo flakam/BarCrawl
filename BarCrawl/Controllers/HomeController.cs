@@ -84,7 +84,16 @@ namespace BarCrawl.Controllers
                 int index = rand.Next(longlat.Count);
                 point = longlat[index];
 
-                if (!crawlList.Contains(point))
+                bool dup = false;
+                foreach (YelpModel x in crawlList)
+                {
+                    if (x.Id == point.Id)
+                    {
+                        dup = true;
+                    }
+                }
+
+                if (!dup)
                 {
                     crawlList.Add(point);
                 }

@@ -9,7 +9,7 @@ namespace BarCrawl.Models
     public class YelpModel
     {
 
-
+        public string Id { get; set; }
         public List<string> Categories { get; set; }
         //public string Alias { get; set; }
         public decimal Longitude { get; set; }
@@ -29,9 +29,9 @@ namespace BarCrawl.Models
         }
         public YelpModel(JToken u)
         {
-           
-           // this.Alias = u["alias"].ToString();
-                  
+
+            // this.Alias = u["alias"].ToString();
+            this.Id = u["id"].ToString();
             this.Name = u["name"].ToString();
             this.Location = u["location"]["display_address"].ToString();
            // this.Open = int.Parse(u["open_at"].ToString());
