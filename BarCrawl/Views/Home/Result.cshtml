@@ -50,8 +50,14 @@
                 </td>
 
                 <td>
-                    @Html.ActionLink("Start", "Chosen5", new { latidude = item.Latitude, longitude = item.Longitude })
-
+                    @Html.ActionLink("Start", "Chosen5", "Home",
+                           new
+                                {
+                                    name = item.Name,
+                                    location = item.Location,
+                                    longitude = item.Longitude,
+                                    latitude = item.Latitude,
+                                }, null)
                 </td>
             </tr>
             }
