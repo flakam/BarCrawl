@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-BarCrawl-E397F25E-A784-469B-829E-80AB640D7C9A</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <StartupObject>BarCrawl.Program</StartupObject>
   </PropertyGroup>
 
 
