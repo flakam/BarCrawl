@@ -70,7 +70,7 @@ namespace BarCrawl
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Identity}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
