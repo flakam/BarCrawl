@@ -18,6 +18,7 @@ namespace BarCrawl.Controllers
         //ApplicationDbContext db = new ApplicationDbContext();
         public IActionResult Index()
         {
+            
             return View();
         }
 
