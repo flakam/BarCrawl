@@ -15,7 +15,7 @@ namespace BarCrawl.Controllers
     public class HomeController : Controller
     {
         List<Bar> Bars = new List<Bar>();
-        //ApplicationDbContext db = new ApplicationDbContext();
+        ApplicationDbContext db = new ApplicationDbContext();
         public IActionResult Index()
         {
             
@@ -93,14 +93,19 @@ namespace BarCrawl.Controllers
 
             }
             Bars = crawlList;
+            //for saving the crawl
+            Barcrawl crawl = new Barcrawl(Bars);
             return crawlList;
         }
+
 
         public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price)
         {
             Bar b = new Bar() { Id = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price };
 
             List<Bar> posBars = getCrawlBars(b, 1000, 5);
+
+            //Barcrawl bc = new Barcrawl(posBars);
 
             return View(posBars);
         }
@@ -127,6 +132,19 @@ namespace BarCrawl.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public async Task<IActionResult> SaveCrawl(List<Bar> Crawl)
+        {
+            Barcrawl bc = new Barcrawl();
+            bc.crawl = Crawl;
+            if (ModelState.IsValid)
+            {
+                db.Add(bc);
+                await db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(bc);
         }
 
         /*

@@ -35,3 +35,11 @@
         }
     </tbody>
 </table>
+
+Would you like to Save/Share this Bar Crawl? Or reroll?
+
+@Html.ActionLink("Save", "SaveCrawl", "Home",
+                          new
+                          {
+                              crawl = Model
+                          }, null)
