@@ -14,6 +14,7 @@ namespace BarCrawl.Models
         public double Latitude { get; set; }
         public string Location { get; set; }
         public string Price { get; set; }
+        public string Rating { get; set; }
 
         public Bar()
         {
@@ -35,6 +36,8 @@ namespace BarCrawl.Models
             {
                 this.Price = "NA";
             }
+
+            this.Rating = t["rating"].ToString();
         }
     }
 

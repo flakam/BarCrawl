@@ -1,4 +1,6 @@
-﻿using System;
+﻿//TEST CHANGE
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -95,9 +97,9 @@ namespace BarCrawl.Controllers
             return crawlList;
         }
 
-        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price)
+        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating)
         {
-            Bar b = new Bar() { Id = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price };
+            Bar b = new Bar() { Id = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating};
 
             List<Bar> posBars = getCrawlBars(b, 1000, 5);
 
