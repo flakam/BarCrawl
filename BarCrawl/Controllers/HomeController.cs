@@ -23,10 +23,10 @@ namespace BarCrawl.Controllers
             return View();
         }
 
-        public List<Bar> GetBars(string location)
+        public List<Bar> GetBars(string location, string rating)
         {
             //Get all bars in location
-            HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&limit=50");
+            HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&rating={rating}&limit=50");
             request.Headers.Add("Authorization", "Bearer 5AZ1TMhzZzb52DbbAMkydLPjNRSURY3x-DtC2o7qDjNTa2n96PSxuLZMmQoBy3WtX5q4EWUh4KQWVG1GG_nq_x2YLEssXjh5WF5kYw8E_VPmyRVMRfDHLwOYM0bXXXYx");
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             StreamReader rd = new StreamReader(response.GetResponseStream());
@@ -39,7 +39,10 @@ namespace BarCrawl.Controllers
             foreach (JToken t in ts)
             {
                 Bar b = new Bar(t);
-                barList.Add(b);
+                if (double.Parse(b.Rating) >= double.Parse(rating))
+                {
+                    barList.Add(b);
+                }
             }
 
             return barList;
@@ -113,9 +116,9 @@ namespace BarCrawl.Controllers
 
 
 
-        public IActionResult Result(string location)
+        public IActionResult Result(string location, string rating)
         {
-            List<Bar> bars = GetBars(location);
+            List<Bar> bars = GetBars(location, rating);
             return View(bars);
         }
 
