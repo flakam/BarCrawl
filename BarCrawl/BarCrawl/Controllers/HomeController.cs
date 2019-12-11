@@ -9,6 +9,7 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using BarCrawl.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BarCrawl.Controllers
 {
@@ -16,12 +17,12 @@ namespace BarCrawl.Controllers
     {
         List<Bar> Bars = new List<Bar>();
         //ApplicationDbContext db = new ApplicationDbContext();
+       // [Authorize]
         public IActionResult Index()
-        {
+        {            
             return View();
         }
-
-        public List<Bar> GetBars(string location)
+            public List<Bar> GetBars(string location)
         {
             //Get all bars in location
             HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&limit=50");
@@ -116,7 +117,21 @@ namespace BarCrawl.Controllers
             List<Bar> bars = GetBars(location);
             return View(bars);
         }
-
+    
+            
+     //   public IActionResult RouteView(string Start, string End, string Mode)
+       // {
+        //    List<GoogleMapsModel> Go = GoogleMapsAPI(Start, End, Mode);
+         //   return View(Go);
+       // }
+      
+       
+        
+        [HttpPost]
+        public IActionResult Search(Bar a)
+        {
+            return RedirectToAction("Home", "Result");
+        }
         public IActionResult Privacy()
         {
             return View();
