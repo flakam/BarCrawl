@@ -16,5 +16,6 @@ namespace BarCrawl.Data
             : base(options)
         {
         }
+        public DbSet<BarCrawl.Models.Bar> Bar { get; set; }
     }
 }
