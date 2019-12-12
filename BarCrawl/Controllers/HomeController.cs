@@ -14,16 +14,58 @@ using BarCrawl.Data;
 
 namespace BarCrawl.Controllers
 {
+
     public class HomeController : Controller
     {
+
+        public static List<Bar> PossibleBars = new List<Bar>();
         List<Bar> Bars = new List<Bar>();
-        //ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db;
+        public HomeController(ApplicationDbContext context)
+        {
+            db = context;
+        }
         public IActionResult Index()
         {
+            
             return View();
         }
 
-        public List<Bar> GetBars(string location, string rating)
+
+        [HttpPost]
+        public IActionResult CreateCrawlDetail(string name)
+        {
+            Crawl c = new Crawl { name = name };
+            Barcrawl bc = new Barcrawl();
+            List<Barcrawl> listBarcrawl = new List<Barcrawl>();
+            List<Bar> bar = PossibleBars;
+            foreach (Bar item in bar)
+            {
+                /*
+                listBarcrawl.Add(new Barcrawl
+                {
+                    bar = item,
+                    crawl = c,
+                });
+                */
+                item.barCrawl.Add(new Barcrawl
+                {
+                    crawl = c
+                }
+                    );
+            }
+
+            db.Crawl.Add(c);
+            db.Bar.AddRange(bar);
+            db.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+           
+            
+        }
+
+        public List<Bar> GetBars(string location)
+
         {
             //Get all bars in location
             List<Bar> barList = new List<Bar>();
@@ -89,7 +131,7 @@ namespace BarCrawl.Controllers
                 bool dup = false;
                 foreach (Bar x in crawlList)
                 {
-                    if (x.Id == point.Id)
+                    if (x.BarId == point.BarId)
                     {
                         dup = true;
                     }
@@ -102,8 +144,11 @@ namespace BarCrawl.Controllers
 
             }
             Bars = crawlList;
+            //for saving the crawl
+            Barcrawl crawl = new Barcrawl();
             return crawlList;
         }
+
 
         public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating)
         {
@@ -111,6 +156,8 @@ namespace BarCrawl.Controllers
 
             List<Bar> posBars = getCrawlBars(b, 1000, 5);
 
+            //Barcrawl bc = new Barcrawl(posBars);
+            PossibleBars = posBars;
             return View(posBars);
         }
 
@@ -138,6 +185,23 @@ namespace BarCrawl.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+
+
+
+        /*
+        public async Task<IActionResult> SaveCrawl(List<Bar> Crawl)
+        {
+            Barcrawl bc = new Barcrawl();
+            bc.crawl = Crawl;
+            if (ModelState.IsValid)
+            {
+                db.Add(bc);
+                await db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(bc);
+        }
+        
         /*
         public IActionResult SaveBar(string id)
         {
