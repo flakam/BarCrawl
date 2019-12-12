@@ -1,4 +1,6 @@
-﻿using System;
+﻿//TEST CHANGE
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,38 +11,86 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using BarCrawl.Data;
-using Microsoft.AspNetCore.Authorization;
 
 namespace BarCrawl.Controllers
 {
+
     public class HomeController : Controller
     {
-        List<Bar> Bars = new List<Bar>();
-        //ApplicationDbContext db = new ApplicationDbContext();
-        // [Authorize]
 
+        public static List<Bar> PossibleBars = new List<Bar>();
+        List<Bar> Bars = new List<Bar>();
+        private readonly ApplicationDbContext db;
+        public HomeController(ApplicationDbContext context)
+        {
+            db = context;
+        }
         public IActionResult Index()
-        {            
+        {
+            
             return View();
         }
-            public List<Bar> GetBars(string location)
+
+
+        [HttpPost]
+        public IActionResult CreateCrawlDetail(string name)
+        {
+            Crawl c = new Crawl { name = name };
+            Barcrawl bc = new Barcrawl();
+            List<Barcrawl> listBarcrawl = new List<Barcrawl>();
+            List<Bar> bar = PossibleBars;
+            foreach (Bar item in bar)
+            {
+                /*
+                listBarcrawl.Add(new Barcrawl
+                {
+                    bar = item,
+                    crawl = c,
+                });
+                */
+                item.barCrawl.Add(new Barcrawl
+                {
+                    crawl = c
+                }
+                    );
+            }
+
+            db.Crawl.Add(c);
+            db.Bar.AddRange(bar);
+            db.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+           
+            
+        }
+
+        public List<Bar> GetBars(string location,string rating)
+
         {
             //Get all bars in location
-            HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&limit=50");
-            request.Headers.Add("Authorization", "Bearer 5AZ1TMhzZzb52DbbAMkydLPjNRSURY3x-DtC2o7qDjNTa2n96PSxuLZMmQoBy3WtX5q4EWUh4KQWVG1GG_nq_x2YLEssXjh5WF5kYw8E_VPmyRVMRfDHLwOYM0bXXXYx");
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            StreamReader rd = new StreamReader(response.GetResponseStream());
-            string ApiText = rd.ReadToEnd();
-            JToken tokens = JToken.Parse(ApiText);
-
-            List<JToken> ts = tokens["businesses"].ToList();
             List<Bar> barList = new List<Bar>();
 
-            foreach (JToken t in ts)
+            for (int i = 0; i < 1000; i+=50)
             {
-                Bar b = new Bar(t);
-                barList.Add(b);
+                HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&rating={rating}&offset={i}&radius=5000&limit=50");
+                request.Headers.Add("Authorization", "Bearer 5AZ1TMhzZzb52DbbAMkydLPjNRSURY3x-DtC2o7qDjNTa2n96PSxuLZMmQoBy3WtX5q4EWUh4KQWVG1GG_nq_x2YLEssXjh5WF5kYw8E_VPmyRVMRfDHLwOYM0bXXXYx");
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                StreamReader rd = new StreamReader(response.GetResponseStream());
+                string ApiText = rd.ReadToEnd();
+                JToken tokens = JToken.Parse(ApiText);
+
+                List<JToken> ts = tokens["businesses"].ToList();
+
+                foreach (JToken t in ts)
+                {
+                    Bar b = new Bar(t);
+                    if (double.Parse(b.Rating) >= double.Parse(rating))
+                    {
+                        barList.Add(b);
+                    }
+                }
             }
+            
 
             return barList;
         }
@@ -81,7 +131,7 @@ namespace BarCrawl.Controllers
                 bool dup = false;
                 foreach (Bar x in crawlList)
                 {
-                    if (x.Id == point.Id)
+                    if (x.BarId == point.BarId)
                     {
                         dup = true;
                     }
@@ -94,15 +144,20 @@ namespace BarCrawl.Controllers
 
             }
             Bars = crawlList;
+            //for saving the crawl
+            Barcrawl crawl = new Barcrawl();
             return crawlList;
         }
 
-        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price)
+
+        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating)
         {
-            Bar b = new Bar() { Id = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price };
+            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating};
 
             List<Bar> posBars = getCrawlBars(b, 1000, 5);
 
+            //Barcrawl bc = new Barcrawl(posBars);
+            PossibleBars = posBars;
             return View(posBars);
         }
 
@@ -113,26 +168,12 @@ namespace BarCrawl.Controllers
 
 
 
-        public IActionResult Result(string location)
+        public IActionResult Result(string location, string rating)
         {
-            List<Bar> bars = GetBars(location);
+            List<Bar> bars = GetBars(location, rating);
             return View(bars);
         }
-    
-            
-     //   public IActionResult RouteView(string Start, string End, string Mode)
-       // {
-        //    List<GoogleMapsModel> Go = GoogleMapsAPI(Start, End, Mode);
-         //   return View(Go);
-       // }
-      
-       
-        
-        [HttpPost]
-        public IActionResult Search(Bar a)
-        {
-            return RedirectToAction("Home", "Result");
-        }
+
         public IActionResult Privacy()
         {
             return View();
@@ -144,6 +185,23 @@ namespace BarCrawl.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+
+
+
+        /*
+        public async Task<IActionResult> SaveCrawl(List<Bar> Crawl)
+        {
+            Barcrawl bc = new Barcrawl();
+            bc.crawl = Crawl;
+            if (ModelState.IsValid)
+            {
+                db.Add(bc);
+                await db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(bc);
+        }
+        
         /*
         public IActionResult SaveBar(string id)
         {

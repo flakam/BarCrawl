@@ -4,16 +4,14 @@ using BarCrawl.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace BarCrawl.Data.Migrations
+namespace BarCrawl.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191211203239_BarList")]
-    partial class BarList
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,10 +21,8 @@ namespace BarCrawl.Data.Migrations
 
             modelBuilder.Entity("BarCrawl.Models.Bar", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("BarId")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Alias");
 
                     b.Property<double>("Latitude");
 
@@ -38,9 +34,64 @@ namespace BarCrawl.Data.Migrations
 
                     b.Property<string>("Price");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Rating");
+
+                    b.HasKey("BarId");
 
                     b.ToTable("Bar");
+                });
+
+            modelBuilder.Entity("BarCrawl.Models.Barcrawl", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BarId");
+
+                    b.Property<int?>("CrawlID");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("BarId");
+
+                    b.HasIndex("CrawlID");
+
+                    b.ToTable("BarCrawlTable");
+                });
+
+            modelBuilder.Entity("BarCrawl.Models.Crawl", b =>
+                {
+                    b.Property<int>("CrawlID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<string>("name");
+
+                    b.HasKey("CrawlID");
+
+                    b.ToTable("CrawlTable");
+                });
+
+            modelBuilder.Entity("BarCrawl.Models.CrawlUser", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CrawlID");
+
+                    b.Property<string>("usersID");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("CrawlID");
+
+                    b.ToTable("CrawlUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -206,6 +257,24 @@ namespace BarCrawl.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("BarCrawl.Models.Barcrawl", b =>
+                {
+                    b.HasOne("BarCrawl.Models.Bar", "bar")
+                        .WithMany("barCrawl")
+                        .HasForeignKey("BarId");
+
+                    b.HasOne("BarCrawl.Models.Crawl", "crawl")
+                        .WithMany("barCrawl")
+                        .HasForeignKey("CrawlID");
+                });
+
+            modelBuilder.Entity("BarCrawl.Models.CrawlUser", b =>
+                {
+                    b.HasOne("BarCrawl.Models.Crawl", "crawl")
+                        .WithMany("crawlUser")
+                        .HasForeignKey("CrawlID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
