@@ -1,4 +1,12 @@
 ﻿@model List<Bar>
+       
+<header>
+ <iframe width="600" height="450" frameborder="1" style="border:1"
+  src="https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Location&destination=@Model[4].Location&waypoints=@Model[1].Location|@Model[2].Location|@Model[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" 
+  allowfullscreen></iframe>
+ </header>
+
+
 
 <table class="table">
     <thead>
@@ -53,14 +61,14 @@
 
             </tr>
         }
+
+
+
     </tbody>
 </table>
 
 
-@*Need to integrate the below url with list from DB*@
 
 
-@*<iframe width="600" height="450" frameborder="0" style="border:0"
-        src="https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Name&destination=@Model[1].Name&waypoints=@Model[2].Name|@Model[3].Name&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
 
-This can be deleted once integrated to the result view*@
+
