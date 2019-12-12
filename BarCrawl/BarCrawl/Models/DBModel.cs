@@ -17,5 +17,8 @@ namespace BarCrawl.Models
         public string Location { get; set; }
         public string Price { get; set; }
         public string Alias { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+       
+       
     }
 }

@@ -17,7 +17,8 @@ namespace BarCrawl.Controllers
     {
         List<Bar> Bars = new List<Bar>();
         //ApplicationDbContext db = new ApplicationDbContext();
-       // [Authorize]
+        // [Authorize]
+
         public IActionResult Index()
         {            
             return View();
