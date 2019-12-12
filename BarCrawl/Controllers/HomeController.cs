@@ -1,4 +1,6 @@
-﻿using System;
+﻿//TEST CHANGE
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -28,6 +30,7 @@ namespace BarCrawl.Controllers
             
             return View();
         }
+
 
         [HttpPost]
         public IActionResult CreateCrawlDetail(string name)
@@ -62,23 +65,32 @@ namespace BarCrawl.Controllers
         }
 
         public List<Bar> GetBars(string location)
+
         {
             //Get all bars in location
-            HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&limit=50");
-            request.Headers.Add("Authorization", "Bearer 5AZ1TMhzZzb52DbbAMkydLPjNRSURY3x-DtC2o7qDjNTa2n96PSxuLZMmQoBy3WtX5q4EWUh4KQWVG1GG_nq_x2YLEssXjh5WF5kYw8E_VPmyRVMRfDHLwOYM0bXXXYx");
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            StreamReader rd = new StreamReader(response.GetResponseStream());
-            string ApiText = rd.ReadToEnd();
-            JToken tokens = JToken.Parse(ApiText);
-
-            List<JToken> ts = tokens["businesses"].ToList();
             List<Bar> barList = new List<Bar>();
 
-            foreach (JToken t in ts)
+            for (int i = 0; i < 1000; i+=50)
             {
-                Bar b = new Bar(t);
-                barList.Add(b);
+                HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&rating={rating}&offset={i}&radius=5000&limit=50");
+                request.Headers.Add("Authorization", "Bearer 5AZ1TMhzZzb52DbbAMkydLPjNRSURY3x-DtC2o7qDjNTa2n96PSxuLZMmQoBy3WtX5q4EWUh4KQWVG1GG_nq_x2YLEssXjh5WF5kYw8E_VPmyRVMRfDHLwOYM0bXXXYx");
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                StreamReader rd = new StreamReader(response.GetResponseStream());
+                string ApiText = rd.ReadToEnd();
+                JToken tokens = JToken.Parse(ApiText);
+
+                List<JToken> ts = tokens["businesses"].ToList();
+
+                foreach (JToken t in ts)
+                {
+                    Bar b = new Bar(t);
+                    if (double.Parse(b.Rating) >= double.Parse(rating))
+                    {
+                        barList.Add(b);
+                    }
+                }
             }
+            
 
             return barList;
         }
@@ -138,9 +150,9 @@ namespace BarCrawl.Controllers
         }
 
 
-        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price)
+        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating)
         {
-            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price };
+            Bar b = new Bar() { Id = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating};
 
             List<Bar> posBars = getCrawlBars(b, 1000, 5);
 
@@ -156,9 +168,9 @@ namespace BarCrawl.Controllers
 
 
 
-        public IActionResult Result(string location)
+        public IActionResult Result(string location, string rating)
         {
-            List<Bar> bars = GetBars(location);
+            List<Bar> bars = GetBars(location, rating);
             return View(bars);
         }
 
