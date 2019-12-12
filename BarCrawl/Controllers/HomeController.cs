@@ -127,6 +127,34 @@ namespace BarCrawl.Controllers
             return View(bars);
         }
 
+
+        //public IActionResult Result() // Result View Integrating the google Maps - GoogleMapRoute view can be deleted once this is integrated.
+        //{
+
+        //    var BarList = new List<Bar>();
+        //    BarList.Add(new Bar() { Name = "Founders Grand Rapids", Latitude = 48.855901, Longitude = 2.349272 });
+        //    BarList.Add(new Bar() { Name = "Stellas Grand Rapids", Latitude = 52.520413, Longitude = 13.402794 });
+        //    BarList.Add(new Bar() { Name = "HopCat Grand Rapids", Latitude = 52.520413, Longitude = 13.402794 });
+        //    BarList.Add(new Bar() { Name = "Mojos Grand Rapids", Latitude = 52.520413, Longitude = 13.402794 });
+        //    return View(BarList);
+        //}
+
+
+        public IActionResult GoogleMapRoute(/*int BarQuantity*/)
+        {         //for (int i = 0; i <=BarQuantity; i++)
+            //{
+
+            //}
+
+            var BarList = new List<Bar>();
+            BarList.Add(new Bar() { Name = "Founders Grand Rapids", Latitude = 48.855901, Longitude = 2.349272 });
+            BarList.Add(new Bar() { Name = "Stellas Grand Rapids", Latitude = 52.520413, Longitude = 13.402794 });
+            BarList.Add(new Bar() { Name = "HopCat Grand Rapids", Latitude = 52.520413, Longitude = 13.402794 });
+            BarList.Add(new Bar() { Name = "Mojos Grand Rapids", Latitude = 52.520413, Longitude = 13.402794 });
+            return View(BarList);
+
+        }
+
         public IActionResult Privacy()
         {
             return View();
