@@ -1,5 +1,11 @@
 ﻿@model List<Bar>
 
+<header>
+    <iframe width="600" height="450" frameborder="1" style="border:1"
+            src="https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Name&destination=@Model[4].Name&waypoints=@Model[1].Name|@Model[2].Name|@Model[3].Name&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+
+
+</header>
 
 
 <table class="table">
@@ -32,6 +38,10 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Location)
+ 
+                    <iframe width="600" height="450" frameborder="1" style="border:1" src="https://maps.googleapis.com/maps/api/streetview?location=@Model[0].Location&size=456x456&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&signature=HRbGAkzQc1i5fIWHMGuk8OctEPk="></iframe>
+               
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)

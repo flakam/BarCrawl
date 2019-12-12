@@ -1,10 +1,6 @@
 ﻿@model List<Bar>
        
-<header>
- <iframe width="600" height="450" frameborder="1" style="border:1"
-  src="https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Location&destination=@Model[4].Location&waypoints=@Model[1].Location|@Model[2].Location|@Model[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" 
-  allowfullscreen></iframe>
- </header>
+
 
 
 
@@ -38,6 +34,7 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Location)
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
