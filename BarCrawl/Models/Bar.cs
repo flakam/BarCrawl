@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,12 +10,16 @@ namespace BarCrawl.Models
 {
     public class Bar
     {
-        public string Id { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
+        public string BarId { get; set; }
         public string Name { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public string Location { get; set; }
         public string Price { get; set; }
+
+        public List<Barcrawl> barCrawl { get; set; } = new List<Barcrawl>();
 
         public Bar()
         {
@@ -22,7 +28,7 @@ namespace BarCrawl.Models
 
         public Bar(JToken t)
         {
-            this.Id = t["id"].ToString();
+            this.BarId = t["id"].ToString();
             this.Name = t["name"].ToString();
             this.Latitude = double.Parse(t["coordinates"]["latitude"].ToString());
             this.Longitude = double.Parse(t["coordinates"]["longitude"].ToString());
