@@ -1,7 +1,7 @@
 @if (User.Identity.IsAuthenticated)
 {
     <a asp-action="Create">Start a Crawl</a><br />
-    <a asp-action="Index">Join a Crawl</a><br />
+    <a  asp-controller="Crawl" asp-action="Index">Join a Crawl</a><br />
 }
 else
 {
