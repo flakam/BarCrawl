@@ -1,2 +1,20 @@
-﻿<a asp-action="Create">Start a Crawl</a><br />
-<a asp-action="">Join a Crawl</a><br />
+@if (User.Identity.IsAuthenticated)
+{
+    <a asp-action="Search">Start a Crawl</a><br />
+    <a asp-action="">Join a Crawl</a><br />
+}
+else
+{
+    <h2>Welcome to Crawlr!</h2>
+    <p>The app that lets you drink on YOUR terms.</p>
+    <p>
+        Bar crawls are fun, right? Of course. But we think they would be even more fun if they were a little more <br />
+        spontaneous. Crawlr gives you the options: Create a personal bar crawl with just you and your mates, or join an <br />
+        existing one and meet up with fellow bar hoppers.
+    </p>
+    <br />
+    <br />
+    <p>To use Crawlr, please log in or sign up!</p>
+    <a asp-area="Identity" asp-page="/Account/Register">Register</a> <br />
+    <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+}
