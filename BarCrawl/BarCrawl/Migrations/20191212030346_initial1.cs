@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BarCrawl.Migrations
 {
-    public partial class BarCrawl : Migration
+    public partial class initial1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -56,8 +56,7 @@ namespace BarCrawl.Migrations
                     Longitude = table.Column<double>(nullable: false),
                     Latitude = table.Column<double>(nullable: false),
                     Location = table.Column<string>(nullable: true),
-                    Price = table.Column<string>(nullable: true),
-                    Rating = table.Column<string>(nullable: true)
+                    Price = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BarCrawl.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191212234721_BarCrawl")]
-    partial class BarCrawl
+    [Migration("20191212030346_initial1")]
+    partial class initial1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -35,8 +35,6 @@ namespace BarCrawl.Migrations
                     b.Property<string>("Name");
 
                     b.Property<string>("Price");
-
-                    b.Property<string>("Rating");
 
                     b.HasKey("BarId");
 
