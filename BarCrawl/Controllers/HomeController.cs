@@ -65,7 +65,7 @@ namespace BarCrawl.Controllers
             
         }
 
-        public List<Bar> GetBars(string location)
+        public List<Bar> GetBars(string location, string rating)
 
         {
             //Get all bars in location
