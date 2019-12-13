@@ -1,6 +1,7 @@
 ﻿//TEST CHANGE
 
 using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace BarCrawl.Controllers
 
             for (int i = 0; i < 1000; i+=50)
             {
-                HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&rating={rating}&offset={i}&radius=5000&limit=50");
+                HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&rating={rating}&radius=5000&offset={i}&limit=50");
                 request.Headers.Add("Authorization", "Bearer 5AZ1TMhzZzb52DbbAMkydLPjNRSURY3x-DtC2o7qDjNTa2n96PSxuLZMmQoBy3WtX5q4EWUh4KQWVG1GG_nq_x2YLEssXjh5WF5kYw8E_VPmyRVMRfDHLwOYM0bXXXYx");
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 StreamReader rd = new StreamReader(response.GetResponseStream());
@@ -114,15 +115,17 @@ namespace BarCrawl.Controllers
             return View(posBars);
         }
 
-        public IActionResult Search()
+        public IActionResult Create()
         {
             return View();
         }
 
 
 
-        public IActionResult Result(string location, string rating)
+        public IActionResult Result(string city, string state, string rating, string datetime)
         {
+            string location = city + ", " + state;
+            
             List<Bar> bars = GetBars(location, rating);
             return View(bars);
         }
