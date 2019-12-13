@@ -34,7 +34,7 @@ namespace BarCrawl.Controllers
 
 
         [HttpPost]
-        public IActionResult CreateCrawlDetail(string name)
+        public IActionResult CreateCrawlDetail(string name,string rating)
         {
             Crawl c = new Crawl { name = name };
             Barcrawl bc = new Barcrawl();
@@ -153,7 +153,7 @@ namespace BarCrawl.Controllers
 
         public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating)
         {
-            Bar b = new Bar() { Id = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating};
+            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating};
 
             List<Bar> posBars = getCrawlBars(b, 1000, 5);
 
@@ -190,33 +190,3 @@ namespace BarCrawl.Controllers
 
 
 
-
-        /*
-        public async Task<IActionResult> SaveCrawl(List<Bar> Crawl)
-        {
-            Barcrawl bc = new Barcrawl();
-            bc.crawl = Crawl;
-            if (ModelState.IsValid)
-            {
-                db.Add(bc);
-                await db.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(bc);
-        }
-        
-        /*
-        public IActionResult SaveBar(string id)
-        {
-            Bar saveBar = Bars.FirstOrDefault(v => v.Id == id);
-            if (saveBar != null)
-            {
-                db.bar.Add(saveBar);
-                db.SaveChanges();
-
-            }
-            return View();
-        }
-        */
-    }
-}
