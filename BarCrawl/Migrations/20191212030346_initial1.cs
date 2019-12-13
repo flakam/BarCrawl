@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BarCrawl.Data.Migrations
+namespace BarCrawl.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class initial1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,6 +45,36 @@ namespace BarCrawl.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Bar",
+                columns: table => new
+                {
+                    BarId = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Longitude = table.Column<double>(nullable: false),
+                    Latitude = table.Column<double>(nullable: false),
+                    Location = table.Column<string>(nullable: true),
+                    Price = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bar", x => x.BarId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CrawlTable",
+                columns: table => new
+                {
+                    CrawlID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    name = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CrawlTable", x => x.CrawlID);
                 });
 
             migrationBuilder.CreateTable(
@@ -153,6 +183,53 @@ namespace BarCrawl.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "BarCrawlTable",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    BarId = table.Column<string>(nullable: true),
+                    CrawlID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BarCrawlTable", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_BarCrawlTable_Bar_BarId",
+                        column: x => x.BarId,
+                        principalTable: "Bar",
+                        principalColumn: "BarId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BarCrawlTable_CrawlTable_CrawlID",
+                        column: x => x.CrawlID,
+                        principalTable: "CrawlTable",
+                        principalColumn: "CrawlID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CrawlUser",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CrawlID = table.Column<int>(nullable: true),
+                    usersID = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CrawlUser", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_CrawlUser_CrawlTable_CrawlID",
+                        column: x => x.CrawlID,
+                        principalTable: "CrawlTable",
+                        principalColumn: "CrawlID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -191,6 +268,21 @@ namespace BarCrawl.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BarCrawlTable_BarId",
+                table: "BarCrawlTable",
+                column: "BarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BarCrawlTable_CrawlID",
+                table: "BarCrawlTable",
+                column: "CrawlID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CrawlUser_CrawlID",
+                table: "CrawlUser",
+                column: "CrawlID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -211,10 +303,22 @@ namespace BarCrawl.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "BarCrawlTable");
+
+            migrationBuilder.DropTable(
+                name: "CrawlUser");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Bar");
+
+            migrationBuilder.DropTable(
+                name: "CrawlTable");
         }
     }
 }
