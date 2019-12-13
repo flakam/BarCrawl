@@ -38,6 +38,7 @@ namespace BarCrawl.Controllers
                 CrawlUser cu = new CrawlUser();
                // cu.crawl = crawl;
                 cu.usersID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
                 crawl.crawlUser.Add(cu);
                 _context.SaveChanges();
             }

@@ -55,8 +55,18 @@ namespace BarCrawl.Controllers
                     );
             }
 
+            
+
             db.Crawl.Add(c);
-            db.Bar.AddRange(bar);
+            
+            foreach(Bar b in bar)
+            {
+                if (db.Bar.Select(a => a.BarId).Where(id => id == b.BarId).Take(1) == null)
+                {
+                    db.Bar.Add(b);
+                }
+            }
+
             db.SaveChanges();
 
             return RedirectToAction(nameof(Index));
@@ -64,7 +74,7 @@ namespace BarCrawl.Controllers
             
         }
 
-        public List<Bar> GetBars(string location)
+        public List<Bar> GetBars(string location, string rating)
 
         {
             //Get all bars in location
@@ -152,7 +162,7 @@ namespace BarCrawl.Controllers
 
         public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating)
         {
-            Bar b = new Bar() { Id = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating};
+            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating};
 
             List<Bar> posBars = getCrawlBars(b, 1000, 5);
 
