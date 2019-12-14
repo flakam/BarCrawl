@@ -84,6 +84,8 @@ namespace BarCrawl.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CrawlID,name,DateCreated")] Crawl crawl)
         {
+            crawl.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (ModelState.IsValid)
             {
                 _context.Add(crawl);
