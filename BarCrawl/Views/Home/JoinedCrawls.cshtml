@@ -1,0 +1,45 @@
+﻿@model IEnumerable<BarCrawl.Models.CrawlUser>
+
+@{
+    ViewData["Title"] = "JoinedCrawls";
+}
+
+<h1>JoinedCrawls</h1>
+
+
+<table class="table table-bordered table-hover table-striped table-sm">
+    <thead>
+        <tr>
+            <th>
+                Crawl ID
+            </th>
+            <th>
+                Crawl Name
+            </th>
+            <th>
+                Date
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.crawl.CrawlID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.crawl.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.crawl.datetime)
+            </td>
+            <td>
+                
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) 
+              
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,5 +1,5 @@
 ﻿//TEST CHANGE
-
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Globalization;
 using System.Collections.Generic;
@@ -12,6 +12,8 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using BarCrawl.Data;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace BarCrawl.Controllers
 {
@@ -32,11 +34,37 @@ namespace BarCrawl.Controllers
             return View();
         }
 
+        public IActionResult UserPage()
+        {
+            string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            List < Crawl> hey = db.Crawl.Where(a => a.UserID == UserId).ToList(); 
+            return View(hey);
+        }
+
+        public IActionResult JoinedCrawls()
+        {
+            string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            List<CrawlUser> cu = db.CrawlUser.Include(g=>g.crawl).Where(a => a.usersID == UserId).ToList();
+            //List<Crawl> joinedCrawls = new List<Crawl>();
+            //foreach(CrawlUser c in cu)
+            //{
+            //    Crawl cr = db.Crawl.FirstOrDefault(a => a.CrawlID == c.crawl.CrawlID);
+            //    joinedCrawls.Add(cr);
+            //}
+
+            return View(cu);
+        }
+
+
 
         [HttpPost]
-        public IActionResult CreateCrawlDetail(string name,string rating)
+
+        public IActionResult CreateCrawlDetail(string name, DateTime crawlDate)
+
         {
-            Crawl c = new Crawl { name = name };
+            Crawl c = new Crawl { name = name, datetime = crawlDate };
+            c.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             Barcrawl bc = new Barcrawl();
             List<Barcrawl> listBarcrawl = new List<Barcrawl>();
             List<Bar> bar = PossibleBars;
@@ -56,8 +84,18 @@ namespace BarCrawl.Controllers
                     );
             }
 
+            
+
             db.Crawl.Add(c);
-            db.Bar.AddRange(bar);
+            
+            foreach(Bar b in bar)
+            {
+                if (db.Bar.Select(a => a.BarId).Where(id => id == b.BarId).Take(1) == null)
+                {
+                    db.Bar.Add(b);
+                }
+            }
+
             db.SaveChanges();
 
             return RedirectToAction(nameof(Index));
@@ -65,7 +103,7 @@ namespace BarCrawl.Controllers
             
         }
 
-        public List<Bar> GetBars(string location)
+        public List<Bar> GetBars(string location, string rating)
 
         {
             //Get all bars in location
