@@ -67,11 +67,18 @@ Would you like to Save/Share this Bar Crawl? Or reroll?
         <form asp-action="CreateCrawlDetail">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label  class="control-label">Name</label>
+                <label class="control-label">Name</label>
                 <input name="name" id="name" class="form-control" />
-                
+
+                <!--PICK DATE & TIME-->
+                <label for="datetime">Choose a time for your appointment:</label><br />
+
+                <input type="datetime-local" id="datetime"
+                       name="datetime" value="2019-12-20T19:30"><br />
             </div>
-    
+
+            
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
