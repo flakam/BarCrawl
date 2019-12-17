@@ -132,7 +132,7 @@ namespace BarCrawl.Controllers
 
         }
 
-        public List<Bar> GetBars(string location, string rating)
+        public List<Bar> GetBars(string location, string rating,string price)
 
         {
             //Get all bars in location
@@ -237,11 +237,11 @@ namespace BarCrawl.Controllers
 
 
 
-        public IActionResult Result(string city, string state, string rating, string datetime)
+        public IActionResult Result(string city, string state, string rating, string datetime,string price)
         {
             string location = city + ", " + state;
 
-            List<Bar> bars = GetBars(location, rating);
+            List<Bar> bars = GetBars(location, rating,price);
             return View(bars);
         }
 
