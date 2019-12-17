@@ -73,7 +73,9 @@ namespace BarCrawl.Controllers
 
 
         [HttpPost]
+
         public IActionResult CreateCrawlDetail(string name, DateTime crawlDate)
+
         {
             Crawl c = new Crawl { name = name, datetime = crawlDate };
             c.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -245,33 +247,3 @@ namespace BarCrawl.Controllers
 
 
 
-
-        /*
-        public async Task<IActionResult> SaveCrawl(List<Bar> Crawl)
-        {
-            Barcrawl bc = new Barcrawl();
-            bc.crawl = Crawl;
-            if (ModelState.IsValid)
-            {
-                db.Add(bc);
-                await db.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(bc);
-        }
-        
-        /*
-        public IActionResult SaveBar(string id)
-        {
-            Bar saveBar = Bars.FirstOrDefault(v => v.Id == id);
-            if (saveBar != null)
-            {
-                db.bar.Add(saveBar);
-                db.SaveChanges();
-
-            }
-            return View();
-        }
-        */
-    }
-}
