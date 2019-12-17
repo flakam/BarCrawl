@@ -21,9 +21,7 @@
             <th>
                 Rating
             </th>
-            <th>
-                Link
-            </th>
+           
 
 
         </tr>
@@ -45,12 +43,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.bar.Rating)
             </td>
-            
-            <td>
-
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-
-            </td>
+        
         </tr>
         }
     </tbody>
