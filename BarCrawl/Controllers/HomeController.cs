@@ -45,14 +45,29 @@ namespace BarCrawl.Controllers
         {
             string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             List<CrawlUser> cu = db.CrawlUser.Include(g=>g.crawl).Where(a => a.usersID == UserId).ToList();
-            //List<Crawl> joinedCrawls = new List<Crawl>();
-            //foreach(CrawlUser c in cu)
-            //{
-            //    Crawl cr = db.Crawl.FirstOrDefault(a => a.CrawlID == c.crawl.CrawlID);
-            //    joinedCrawls.Add(cr);
-            //}
+           
 
             return View(cu);
+        }
+
+        public IActionResult CrawlDetails(string ID)
+        {
+            int crawlID = int.Parse(ID);
+            List<Barcrawl> bc = db.Barcrawl.Include(g => g.bar).Where(a => a.crawl.CrawlID == crawlID/*int.Parse(crawlID)*/).ToList();
+            
+            return View(bc);
+            
+            
+            //Crawl c = db.Crawl.FirstOrDefault(i => i.CrawlID == 14);
+           
+            //List<Bar> bars = new List<Bar>();
+            //foreach(Barcrawl bc in c.barCrawl)
+            //{
+            //    Bar b = db.Bar.Find(bc.bar.BarId);
+            //    bars.Add(b);
+            //}
+            //return View(c);
+            
         }
 
 
@@ -66,6 +81,15 @@ namespace BarCrawl.Controllers
             Barcrawl bc = new Barcrawl();
             List<Barcrawl> listBarcrawl = new List<Barcrawl>();
             List<Bar> bar = PossibleBars;
+
+            foreach (Bar b in bar)
+            {
+                if (db.Bar.Where(id => id == b).Count() == 0)
+                {
+                    db.Bar.Add(b);
+                }
+            }
+
             foreach (Bar item in bar)
             {
                 /*
@@ -77,6 +101,7 @@ namespace BarCrawl.Controllers
                 */
                 item.barCrawl.Add(new Barcrawl
                 {
+                    bar = item,
                     crawl = c
                 }
                     );
@@ -86,13 +111,7 @@ namespace BarCrawl.Controllers
 
             db.Crawl.Add(c);
             
-            foreach(Bar b in bar)
-            {
-                if (db.Bar.Select(a => a.BarId).Where(id => id == b.BarId).Take(1) == null)
-                {
-                    db.Bar.Add(b);
-                }
-            }
+           
 
             db.SaveChanges();
 
