@@ -4,32 +4,56 @@
     ViewData["Title"] = "CrawlDetails";
 }
 
-<h1>CrawlDetails</h1>
+<h1>@ViewBag.CrawlName</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
                 Name
             </th>
-            <th></th>
+            <th>
+                Location
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Rating
+            </th>
+            
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.bar.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.bar.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.bar.Location)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.bar.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.bar.Rating)
+                </td>
+                <td>
+
+                    <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<header>
+    <iframe width="600" height="450" frameborder="1" style="border:1"
+            src="https://www.google.com/maps/embed/v1/directions?origin=@ViewBag.MapBars[0].Name@ViewBag.MapBars[0].Location&destination=@ViewBag.MapBars[4].Name@ViewBag.MapBars[4].Location&waypoints=@ViewBag.MapBars[1].Location@ViewBag.MapBars[1].Name|@ViewBag.MapBars[2].Name@ViewBag.MapBars[2].Location|@ViewBag.MapBars[3].Name@ViewBag.MapBars[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+
+
+</header>

@@ -53,8 +53,18 @@ namespace BarCrawl.Controllers
         public IActionResult CrawlDetails(string ID)
         {
             int crawlID = int.Parse(ID);
+            ViewBag.CrawlName = db.Crawl.Find(crawlID).name;
             List<Barcrawl> bc = db.Barcrawl.Include(g => g.bar).Where(a => a.crawl.CrawlID == crawlID/*int.Parse(crawlID)*/).ToList();
+            List<Bar> cool = new List<Bar>();
+            foreach(Barcrawl ayy in bc)
+            {
 
+                Bar b = new Bar { Name = ayy.bar.Name, Location = ayy.bar.Location };
+                cool.Add(b);
+
+            }
+
+            ViewBag.MapBars = cool;
             return View(bc);
 
 
