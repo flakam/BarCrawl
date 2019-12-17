@@ -30,22 +30,22 @@ namespace BarCrawl.Controllers
         }
         public IActionResult Index()
         {
-            
+
             return View();
         }
 
         public IActionResult UserPage()
         {
             string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            List < Crawl> hey = db.Crawl.Where(a => a.UserID == UserId).ToList(); 
+            List<Crawl> hey = db.Crawl.Where(a => a.UserID == UserId).ToList();
             return View(hey);
         }
 
         public IActionResult JoinedCrawls()
         {
             string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            List<CrawlUser> cu = db.CrawlUser.Include(g=>g.crawl).Where(a => a.usersID == UserId).ToList();
-           
+            List<CrawlUser> cu = db.CrawlUser.Include(g => g.crawl).Where(a => a.usersID == UserId).ToList();
+
 
             return View(cu);
         }
@@ -54,12 +54,12 @@ namespace BarCrawl.Controllers
         {
             int crawlID = int.Parse(ID);
             List<Barcrawl> bc = db.Barcrawl.Include(g => g.bar).Where(a => a.crawl.CrawlID == crawlID/*int.Parse(crawlID)*/).ToList();
-            
+
             return View(bc);
-            
-            
+
+
             //Crawl c = db.Crawl.FirstOrDefault(i => i.CrawlID == 14);
-           
+
             //List<Bar> bars = new List<Bar>();
             //foreach(Barcrawl bc in c.barCrawl)
             //{
@@ -67,7 +67,7 @@ namespace BarCrawl.Controllers
             //    bars.Add(b);
             //}
             //return View(c);
-            
+
         }
 
 
@@ -109,17 +109,17 @@ namespace BarCrawl.Controllers
                     );
             }
 
-            
+
 
             db.Crawl.Add(c);
-            
-           
+
+
 
             db.SaveChanges();
 
             return RedirectToAction(nameof(Index));
-           
-            
+
+
         }
 
         public List<Bar> GetBars(string location, string rating)
@@ -128,7 +128,7 @@ namespace BarCrawl.Controllers
             //Get all bars in location
             List<Bar> barList = new List<Bar>();
 
-            for (int i = 0; i < 1000; i+=50)
+            for (int i = 0; i < 1000; i += 50)
             {
                 HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&rating={rating}&radius=5000&offset={i}&limit=50");
                 request.Headers.Add("Authorization", "Bearer 5AZ1TMhzZzb52DbbAMkydLPjNRSURY3x-DtC2o7qDjNTa2n96PSxuLZMmQoBy3WtX5q4EWUh4KQWVG1GG_nq_x2YLEssXjh5WF5kYw8E_VPmyRVMRfDHLwOYM0bXXXYx");
@@ -148,7 +148,7 @@ namespace BarCrawl.Controllers
                     }
                 }
             }
-            
+
 
             return barList;
         }
@@ -210,7 +210,7 @@ namespace BarCrawl.Controllers
 
         public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating)
         {
-            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating};
+            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating };
 
             List<Bar> posBars = getCrawlBars(b, 1000, 5);
 
@@ -229,7 +229,7 @@ namespace BarCrawl.Controllers
         public IActionResult Result(string city, string state, string rating, string datetime)
         {
             string location = city + ", " + state;
-            
+
             List<Bar> bars = GetBars(location, rating);
             return View(bars);
         }
@@ -244,6 +244,8 @@ namespace BarCrawl.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+    }
+}
 
 
 
