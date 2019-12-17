@@ -23,6 +23,7 @@
             <th>
                 Rating
             </th>
+            
 
 
 
@@ -34,7 +35,7 @@
             <tr>
 
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <a href=@Html.DisplayFor(modelItem => item.Url) target="_blank">@Html.DisplayFor(modelItem => item.Name)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Location)

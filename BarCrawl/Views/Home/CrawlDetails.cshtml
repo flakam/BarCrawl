@@ -21,32 +21,37 @@
             <th>
                 Rating
             </th>
-            
+            <th>
+                Link
+            </th>
+
+
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
 
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.bar.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.bar.Location)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.bar.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.bar.Rating)
-                </td>
-                <td>
+        <tr>
+            <td>
+                <a href=@Html.DisplayFor(modelItem => item.bar.Url) target="_blank">@Html.DisplayFor(modelItem => item.bar.Name)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.bar.Location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.bar.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.bar.Rating)
+            </td>
+            
+            <td>
 
-                    <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
 
-                </td>
-            </tr>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

@@ -219,9 +219,9 @@ namespace BarCrawl.Controllers
         }
 
 
-        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating)
+        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating, string url)
         {
-            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating };
+            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating, Url = url };
 
             List<Bar> posBars = getCrawlBars(b, 1000, 5);
 
