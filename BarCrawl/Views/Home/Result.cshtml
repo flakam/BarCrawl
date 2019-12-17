@@ -33,7 +33,9 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Location)
+                    <iframe width="300" height="300" frameborder="1" style="border:1"
+                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&q=@item.Location" allowfullscreen>
+                    </iframe>
 
                 </td>
                 <td>

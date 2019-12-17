@@ -16,7 +16,7 @@ namespace BarCrawl.Models
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public Bar bar { get; set; }
         public Crawl crawl { get; set; }
-
+        
         public Barcrawl()
         {
             
