@@ -1,5 +1,5 @@
 ﻿@model List<Bar>
-       
+
 
 
 
@@ -25,26 +25,32 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @for (int i = 0; i <= 5; i++)
         {
-            <tr>
+            @foreach (var item in Model)
+            {
+                <tr>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Location)
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        
+                        <iframe width="300" height="300" frameborder="1" style="border:1"
+                                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&q=@item.Location" allowfullscreen>
+                        </iframe>
 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Rating)
-                </td>
-                <td>
-                    @Html.ActionLink("Start", "Stops", "Home",
-                       new
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rating)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Start", "Stops", "Home",
+                            new
                             {
                                 id = item.Id,
                                 name = item.Name,
@@ -54,9 +60,10 @@
                                 price = item.Price,
                                 rating = item.Rating,
                             }, null)
-                </td>
+                    </td>
 
-            </tr>
+                </tr>
+            }
         }
 
 

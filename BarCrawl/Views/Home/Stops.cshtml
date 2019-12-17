@@ -37,13 +37,12 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Location)
- 
-                    @*<iframe width="600" height="450" frameborder="1" style="border:1" src="https://maps.googleapis.com/maps/api/streetview?location=@Model[0].Location&size=456x456&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&signature=HRbGAkzQc1i5fIWHMGuk8OctEPk="></iframe>*@
-               
 
-                </td>
-                <td>
+                    <iframe width="400" height="200" frameborder="1" style="border:1"
+                            src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&location=@item.Latitude,@item.Longitude&heading=210&pitch=5&fov=50" allowfullscreen></iframe>
+
+<td>
+      
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
                 <td>

@@ -30,7 +30,7 @@ namespace BarCrawl.Controllers
 
             for (int i = 0; i < 1000; i+=50)
             {
-                HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&rating={rating}&offset={i}&radius=5000&limit=50");
+                HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&rating={rating}&offset={i}&radius=5000&limit=10");
                 request.Headers.Add("Authorization", "Bearer 5AZ1TMhzZzb52DbbAMkydLPjNRSURY3x-DtC2o7qDjNTa2n96PSxuLZMmQoBy3WtX5q4EWUh4KQWVG1GG_nq_x2YLEssXjh5WF5kYw8E_VPmyRVMRfDHLwOYM0bXXXYx");
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 StreamReader rd = new StreamReader(response.GetResponseStream());

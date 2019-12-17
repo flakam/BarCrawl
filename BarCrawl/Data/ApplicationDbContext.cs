@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using BarCrawl.Models;
 
 namespace BarCrawl.Data
 {
@@ -16,5 +17,7 @@ namespace BarCrawl.Data
             : base(options)
         {
         }
+
+        public DbSet<BarCrawl.Models.Bar> Bar { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace BarCrawl.Models
         public string Location { get; set; }
         public string Price { get; set; }
         public string Rating { get; set; }
-
+   
         public Bar()
         {
 
@@ -26,8 +26,10 @@ namespace BarCrawl.Models
             this.Id = t["id"].ToString();
             this.Name = t["name"].ToString();
             this.Latitude = double.Parse(t["coordinates"]["latitude"].ToString());
-            this.Longitude = double.Parse(t["coordinates"]["longitude"].ToString());
+            this.Longitude =double.Parse(t["coordinates"]["longitude"].ToString());
             this.Location = t["location"]["display_address"].ToString();
+          
+
             if (t["price"] != null)
             {
                 this.Price = t["price"].ToString();
