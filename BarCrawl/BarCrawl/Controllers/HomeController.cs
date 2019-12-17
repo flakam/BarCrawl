@@ -1,5 +1,5 @@
 ﻿//TEST CHANGE
-
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Globalization;
 using System.Collections.Generic;
@@ -12,12 +12,15 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using BarCrawl.Data;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace BarCrawl.Controllers
 {
 
     public class HomeController : Controller
     {
+        string value;
 
         public static List<Bar> PossibleBars = new List<Bar>();
         List<Bar> Bars = new List<Bar>();
@@ -28,15 +31,41 @@ namespace BarCrawl.Controllers
         }
         public IActionResult Index()
         {
-            
+
             return View();
         }
 
+        public IActionResult UserPage()
+        {
+            string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            List<Crawl> hey = db.Crawl.Where(a => a.UserID == UserId).ToList();
+            return View(hey);
+        }
+
+        public IActionResult JoinedCrawls()
+        {
+            string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            List<CrawlUser> cu = db.CrawlUser.Include(g => g.crawl).Where(a => a.usersID == UserId).ToList();
+            //List<Crawl> joinedCrawls = new List<Crawl>();
+            //foreach(CrawlUser c in cu)
+            //{
+            //    Crawl cr = db.Crawl.FirstOrDefault(a => a.CrawlID == c.crawl.CrawlID);
+            //    joinedCrawls.Add(cr);
+            //}
+
+            return View(cu);
+        }
+
+
 
         [HttpPost]
-        public IActionResult CreateCrawlDetail(string name)
+
+        public IActionResult CreateCrawlDetail(string name, DateTime crawlDate)
+
         {
-            Crawl c = new Crawl { name = name };
+            Crawl c = new Crawl { name = name, datetime = crawlDate };
+            c.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             Barcrawl bc = new Barcrawl();
             List<Barcrawl> listBarcrawl = new List<Barcrawl>();
             List<Bar> bar = PossibleBars;
@@ -56,24 +85,38 @@ namespace BarCrawl.Controllers
                     );
             }
 
+
+
             db.Crawl.Add(c);
-            db.Bar.AddRange(bar);
+
+            foreach (Bar b in bar)
+            {
+                if (db.Bar.Select(a => a.BarId).Where(id => id == b.BarId).Take(1) == null)
+                {
+                    db.Bar.Add(b);
+                }
+            }
+
             db.SaveChanges();
 
             return RedirectToAction(nameof(Index));
-           
-            
+
+
         }
 
-        public List<Bar> GetBars(string location,string rating)
+        public List<Bar> GetBars(string location, string rating,string price)
 
         {
+
+            
             //Get all bars in location
             List<Bar> barList = new List<Bar>();
 
-            for (int i = 0; i < 200; i+=50)
+            
+            for (int i = 0; i < 1000; i += 50)
             {
-                HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&rating={rating}&radius=5000&offset={i}&limit=50");
+                
+                HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&price={price}&rating={rating}&radius=5000&offset={i}&limit=50");
                 request.Headers.Add("Authorization", "Bearer 5AZ1TMhzZzb52DbbAMkydLPjNRSURY3x-DtC2o7qDjNTa2n96PSxuLZMmQoBy3WtX5q4EWUh4KQWVG1GG_nq_x2YLEssXjh5WF5kYw8E_VPmyRVMRfDHLwOYM0bXXXYx");
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 StreamReader rd = new StreamReader(response.GetResponseStream());
@@ -81,7 +124,7 @@ namespace BarCrawl.Controllers
                 JToken tokens = JToken.Parse(ApiText);
 
                 List<JToken> ts = tokens["businesses"].ToList();
-
+                 
                 foreach (JToken t in ts)
                 {
                     Bar b = new Bar(t);
@@ -91,7 +134,7 @@ namespace BarCrawl.Controllers
                     }
                 }
             }
-            
+
 
             return barList;
         }
@@ -153,7 +196,7 @@ namespace BarCrawl.Controllers
 
         public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating)
         {
-            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating};
+            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating };
 
             List<Bar> posBars = getCrawlBars(b, 1000, 5);
 
@@ -169,11 +212,11 @@ namespace BarCrawl.Controllers
 
 
 
-        public IActionResult Result(string city, string state, string rating, string datetime)
+        public IActionResult Result(string city, string state, string rating, string datetime,string price)
         {
             string location = city + ", " + state;
-            
-            List<Bar> bars = GetBars(location, rating);
+
+            List<Bar> bars = GetBars(location, rating,price);
             return View(bars);
         }
 
@@ -187,36 +230,8 @@ namespace BarCrawl.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
-
-
-        /*
-        public async Task<IActionResult> SaveCrawl(List<Bar> Crawl)
-        {
-            Barcrawl bc = new Barcrawl();
-            bc.crawl = Crawl;
-            if (ModelState.IsValid)
-            {
-                db.Add(bc);
-                await db.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(bc);
-        }
-        
-        /*
-        public IActionResult SaveBar(string id)
-        {
-            Bar saveBar = Bars.FirstOrDefault(v => v.Id == id);
-            if (saveBar != null)
-            {
-                db.bar.Add(saveBar);
-                db.SaveChanges();
-
-            }
-            return View();
-        }
-        */
     }
 }
+
+
+

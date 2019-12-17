@@ -20,6 +20,6 @@ namespace BarCrawl.Data
         public DbSet<BarCrawl.Models.Barcrawl> Barcrawl { get; set; }
         public DbSet<BarCrawl.Models.Crawl> Crawl { get; set; }
         public DbSet<BarCrawl.Models.Bar> Bar { get; set; }
-
+        public DbSet<BarCrawl.Models.CrawlUser> CrawlUser { get; set; }
     }
 }

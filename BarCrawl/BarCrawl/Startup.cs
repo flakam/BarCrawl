@@ -69,7 +69,7 @@ namespace BarCrawl
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
+                    name: "CrawlR",
                    
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
