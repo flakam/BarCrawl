@@ -230,12 +230,17 @@ namespace BarCrawl.Controllers
             //Use stringbuilder to make string for the gmaps url
 
             StringBuilder waypointsSB = new StringBuilder();
-            for (int i = 1; i < posBars.Count() - 1; i++)
+            for (int i = 1; i < posBars.Count() - 2; i++)
             {
                 waypointsSB.Append(posBars[i].Name + '|');
             }
+            string waypoints = waypointsSB.ToString();
 
-            ViewBag.waypoints = waypointsSB;
+            // Make string play nice with url (no &)
+
+            waypoints.Replace("%", "and");
+
+            ViewBag.waypoints = waypoints;
             PossibleBars = posBars;
             return View(posBars);
         }
