@@ -98,7 +98,7 @@ namespace BarCrawl.Controllers
 
             foreach (Bar b in bar)
             {
-                if (db.Bar.Where(id => id == b).Count() == 0)
+                if (db.Bar.Where(BarID => BarID == b).Count() == 0)
                 {
                     db.Bar.Add(b);
                 }
@@ -197,7 +197,7 @@ namespace BarCrawl.Controllers
                 int index = rand.Next(possibleList.Count);
                 point = possibleList[index];
 
-                // Add only if it's not already on the list - not working
+                // Add only if it's not already on the list 
 
                 bool dup = false;
                 foreach (Bar x in crawlList)
@@ -225,22 +225,22 @@ namespace BarCrawl.Controllers
         {
             Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating, Url = url };
 
-            List<Bar> posBars = getCrawlBars(b, 1000, num);
+            List<Bar> posBars = getCrawlBars(b, 1200, num);
 
             //Use stringbuilder to make string for the gmaps url
 
             StringBuilder waypointsSB = new StringBuilder();
             for (int i = 1; i < posBars.Count() - 2; i++)
             {
-                waypointsSB.Append(posBars[i].Name + '|');
+                waypointsSB.Append(posBars[i].Name + " " + posBars[i].Location + '|');
             }
             string waypoints = waypointsSB.ToString();
 
             // Make string play nice with url (no &)
 
-            waypoints.Replace("%", "and");
+            string waypoints2 = waypoints.Replace("&", "and");
 
-            ViewBag.waypoints = waypoints;
+            ViewBag.waypoints = waypoints2;
             PossibleBars = posBars;
             return View(posBars);
         }
