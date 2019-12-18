@@ -14,6 +14,8 @@ using Newtonsoft.Json.Linq;
 using BarCrawl.Data;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+
 
 namespace BarCrawl.Controllers
 {
@@ -219,13 +221,21 @@ namespace BarCrawl.Controllers
         }
 
 
-        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating, string url)
+        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating, string url, int num)
         {
             Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating, Url = url };
 
-            List<Bar> posBars = getCrawlBars(b, 1000, 5);
+            List<Bar> posBars = getCrawlBars(b, 1000, num);
 
-            //Barcrawl bc = new Barcrawl(posBars);
+            //Use stringbuilder to make string for the gmaps url
+
+            StringBuilder waypointsSB = new StringBuilder();
+            for (int i = 1; i < posBars.Count() - 1; i++)
+            {
+                waypointsSB.Append(posBars[i].Name + '|');
+            }
+
+            ViewBag.waypoints = waypointsSB;
             PossibleBars = posBars;
             return View(posBars);
         }
@@ -237,10 +247,10 @@ namespace BarCrawl.Controllers
 
 
 
-        public IActionResult Result(string city, string state, string rating, string datetime,string price)
+        public IActionResult Result(string city, string state, string rating, string datetime,string price, int numBars)
         {
             string location = city + ", " + state;
-
+            ViewBag.num = numBars;
             List<Bar> bars = GetBars(location, rating,price);
             return View(bars);
         }
