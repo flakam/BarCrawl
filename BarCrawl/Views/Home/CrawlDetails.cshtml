@@ -5,6 +5,11 @@
 }
 
 <h1>@ViewBag.CrawlName</h1>
+<iframe class="route-map" frameborder="1" 
+        
+        src="@ViewBag.gmapurl"
+        allowfullscreen></iframe>
+</iframe>
 
 <table class="table">
     <thead>
@@ -21,7 +26,7 @@
             <th>
                 Rating
             </th>
-           
+
 
 
         </tr>
@@ -30,33 +35,33 @@
         @foreach (var item in Model)
         {
 
-        <tr>
-            <td>
-                <a href=@Html.DisplayFor(modelItem => item.bar.Url) target="_blank">@Html.DisplayFor(modelItem => item.bar.Name)</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.bar.Location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.bar.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.bar.Rating)
-            </td>
-        
-        </tr>
+            <tr>
+                <td>
+                    <a href=@Html.DisplayFor(modelItem => item.bar.Url) target="_blank">@Html.DisplayFor(modelItem => item.bar.Name)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.bar.Location)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.bar.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.bar.Rating)
+                </td>
+
+            </tr>
         }
     </tbody>
 </table>
 
-@foreach(string s in ViewBag.Users)
+@foreach (string s in ViewBag.Users)
 {
     @s <br />
 }
 
 <header>
-   @*@ <iframe width="600" height="450" frameborder="1" style="border:1"
-            src="https://www.google.com/maps/embed/v1/directions?origin=@ViewBag.MapBars[0].Name@ViewBag.MapBars[0].Location&destination=@ViewBag.MapBars[4].Name@ViewBag.MapBars[4].Location&waypoints=@ViewBag.MapBars[1].Location@ViewBag.MapBars[1].Name|@ViewBag.MapBars[2].Name@ViewBag.MapBars[2].Location|@ViewBag.MapBars[3].Name@ViewBag.MapBars[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
-       *@
+    @*@ <iframe width="600" height="450" frameborder="1" style="border:1"
+        src="https://www.google.com/maps/embed/v1/directions?origin=@ViewBag.MapBars[0].Name@ViewBag.MapBars[0].Location&destination=@ViewBag.MapBars[4].Name@ViewBag.MapBars[4].Location&waypoints=@ViewBag.MapBars[1].Location@ViewBag.MapBars[1].Name|@ViewBag.MapBars[2].Name@ViewBag.MapBars[2].Location|@ViewBag.MapBars[3].Name@ViewBag.MapBars[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+    *@
 
 </header>

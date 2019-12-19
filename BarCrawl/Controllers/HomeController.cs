@@ -83,6 +83,7 @@ namespace BarCrawl.Controllers
                 users.Add(un);
             }
             ViewBag.Users = users;
+            ViewBag.gmapurl = GMapUrlBuilder(cool);
 
             ViewBag.MapBars = cool;
             return View(bc);
@@ -238,27 +239,51 @@ namespace BarCrawl.Controllers
             return crawlList;
         }
 
+        public string GMapUrlBuilder(List<Bar> bars)
+        {
+            
+            //https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Location&destination=@Model[Model.Count()-1].Location@ViewBag.waypoints&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+            
+            StringBuilder urlSB = new StringBuilder();
+            foreach (Bar b in bars)
+            {
+                b.Name = b.Name.Replace("&", "and");
+                b.Name = b.Name.Replace("'", "");
+                //b.Name = b.Name.Replace(",", "");
+               
 
+            }
+
+            urlSB.Append("https://www.google.com/maps/embed/v1/directions?origin=" + bars[0].Name + bars[0].Location);
+            urlSB.Append("&destination=" + bars[bars.Count - 1].Name + bars[bars.Count - 1].Location);
+
+            
+            if (bars.Count > 2)
+            {
+                urlSB.Append("&waypoints=");
+                for (int i = 1; i < bars.Count() - 2; i++)
+                {
+                    urlSB.Append(bars[i].Name + " " + bars[i].Location + '|');
+                }
+                urlSB.Append(bars[bars.Count - 2].Name + " " + bars[bars.Count - 2].Location);
+            }
+
+            urlSB.Append("&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking");
+            string url = urlSB.ToString();
+            
+            
+            return url;
+        }
+        
         public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating, string url, int num)
         {
             Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating, Url = url };
 
             List<Bar> posBars = getCrawlBars(b, 1200, num);
 
-            //Use stringbuilder to make string for the gmaps url
+            
 
-            StringBuilder waypointsSB = new StringBuilder();
-            for (int i = 1; i < posBars.Count() - 2; i++)
-            {
-                waypointsSB.Append(posBars[i].Name + " " + posBars[i].Location + '|');
-            }
-            string waypoints = waypointsSB.ToString();
-
-            // Make string play nice with url (no &)
-
-            string waypoints2 = waypoints.Replace("&", "and");
-
-            ViewBag.waypoints = waypoints2;
+            ViewBag.gmapurl = GMapUrlBuilder(posBars);
             PossibleBars = posBars;
             return View(posBars);
         }

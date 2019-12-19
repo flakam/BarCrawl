@@ -1,20 +1,18 @@
 ﻿@model List<Bar>
-
 <h2>Route Map</h2>
 <header>
     <link rel="stylesheet" href="~/site.css" />
 </header>
 
 <div class="map-n-stuff">
-<div class="left">
-    @*@<iframe width="600" height="450" frameborder="1" style="border:1"
-        src="https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Location&destination=@Model[4].Location&waypoints=@Model[1].Location|@Model[2].Location|@Model[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
-    *@
-    <iframe class="route-map" frameborder="1" style="border:1"
-            src="https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Location&destination=@Model[Model.Count()-1].Location&waypoints=@ViewBag.waypoints @Model[Model.Count() - 2].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+    <div class="left">
 
-</div>
+        <iframe class="route-map" frameborder="1"
+                src="@ViewBag.gmapurl"
+                allowfullscreen></iframe>
+        </iframe>
 
+    </div>
 <div class="right">
     <form asp-action="CreateCrawlDetail">
         <h2>Create</h2>
