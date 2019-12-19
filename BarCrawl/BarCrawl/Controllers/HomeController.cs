@@ -20,7 +20,6 @@ namespace BarCrawl.Controllers
 
     public class HomeController : Controller
     {
-        string value;
 
         public static List<Bar> PossibleBars = new List<Bar>();
         List<Bar> Bars = new List<Bar>();
@@ -46,14 +45,39 @@ namespace BarCrawl.Controllers
         {
             string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             List<CrawlUser> cu = db.CrawlUser.Include(g => g.crawl).Where(a => a.usersID == UserId).ToList();
-            //List<Crawl> joinedCrawls = new List<Crawl>();
-            //foreach(CrawlUser c in cu)
-            //{
-            //    Crawl cr = db.Crawl.FirstOrDefault(a => a.CrawlID == c.crawl.CrawlID);
-            //    joinedCrawls.Add(cr);
-            //}
+
 
             return View(cu);
+        }
+
+        public IActionResult CrawlDetails(string ID)
+        {
+            int crawlID = int.Parse(ID);
+            ViewBag.CrawlName = db.Crawl.Find(crawlID).name;
+            List<Barcrawl> bc = db.Barcrawl.Include(g => g.bar).Where(a => a.crawl.CrawlID == crawlID/*int.Parse(crawlID)*/).ToList();
+            List<Bar> cool = new List<Bar>();
+            foreach(Barcrawl ayy in bc)
+            {
+
+                Bar b = new Bar { Name = ayy.bar.Name, Location = ayy.bar.Location };
+                cool.Add(b);
+
+            }
+
+            ViewBag.MapBars = cool;
+            return View(bc);
+
+
+            //Crawl c = db.Crawl.FirstOrDefault(i => i.CrawlID == 14);
+
+            //List<Bar> bars = new List<Bar>();
+            //foreach(Barcrawl bc in c.barCrawl)
+            //{
+            //    Bar b = db.Bar.Find(bc.bar.BarId);
+            //    bars.Add(b);
+            //}
+            //return View(c);
+
         }
 
 
@@ -69,6 +93,15 @@ namespace BarCrawl.Controllers
             Barcrawl bc = new Barcrawl();
             List<Barcrawl> listBarcrawl = new List<Barcrawl>();
             List<Bar> bar = PossibleBars;
+
+            foreach (Bar b in bar)
+            {
+                if (db.Bar.Where(id => id == b).Count() == 0)
+                {
+                    db.Bar.Add(b);
+                }
+            }
+
             foreach (Bar item in bar)
             {
                 /*
@@ -80,6 +113,7 @@ namespace BarCrawl.Controllers
                 */
                 item.barCrawl.Add(new Barcrawl
                 {
+                    bar = item,
                     crawl = c
                 }
                     );
@@ -89,13 +123,7 @@ namespace BarCrawl.Controllers
 
             db.Crawl.Add(c);
 
-            foreach (Bar b in bar)
-            {
-                if (db.Bar.Select(a => a.BarId).Where(id => id == b.BarId).Take(1) == null)
-                {
-                    db.Bar.Add(b);
-                }
-            }
+
 
             db.SaveChanges();
 
@@ -108,14 +136,12 @@ namespace BarCrawl.Controllers
 
         {
 
-            
             //Get all bars in location
             List<Bar> barList = new List<Bar>();
 
-            
-            for (int i = 0; i < 1000; i += 50)
+
+            for (int i = 0; i < 150; i+=50)
             {
-                
                 HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&price={price}&rating={rating}&radius=5000&offset={i}&limit=50");
                 request.Headers.Add("Authorization", "Bearer 5AZ1TMhzZzb52DbbAMkydLPjNRSURY3x-DtC2o7qDjNTa2n96PSxuLZMmQoBy3WtX5q4EWUh4KQWVG1GG_nq_x2YLEssXjh5WF5kYw8E_VPmyRVMRfDHLwOYM0bXXXYx");
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -124,7 +150,7 @@ namespace BarCrawl.Controllers
                 JToken tokens = JToken.Parse(ApiText);
 
                 List<JToken> ts = tokens["businesses"].ToList();
-                 
+
                 foreach (JToken t in ts)
                 {
                     Bar b = new Bar(t);

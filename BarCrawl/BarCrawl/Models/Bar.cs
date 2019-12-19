@@ -19,9 +19,9 @@ namespace BarCrawl.Models
         public string Location { get; set; }
         public string Price { get; set; }
         public string Rating { get; set; }
-        
 
         public List<Barcrawl> barCrawl { get; set; } = new List<Barcrawl>();
+        public string Id { get; internal set; }
 
         public Bar()
         {
