@@ -89,6 +89,56 @@
             }
         </tbody>
     </table>
+
+    <h2>Route</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    From
+                </th>
+                <th>
+                    To
+                </th>
+                <th>
+                    Route
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @for (int i = 0; i < Model.Count() - 1; i++)
+            {
+                <tr>
+
+                    <td>
+                        <a href=@Html.DisplayFor(modelItem => Model[i].Url) target="_blank">@Html.DisplayFor(modelItem => Model[i].Name)</a>
+                    </td>
+                    <td>
+
+                        <a href=@Html.DisplayFor(modelItem => Model[i+1].Url) target="_blank">@Html.DisplayFor(modelItem => Model[i + 1].Name) </a>
+
+
+                    </td>
+                    <td>
+
+                        <iframe width="400" height="250" frameborder="1" style="border:1"
+                                src="https://www.google.com/maps/embed/v1/directions?origin=@Model[i].Location&destination=@Model[i+1].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+
+
+
 </div>
 
 
