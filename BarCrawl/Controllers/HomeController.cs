@@ -1,5 +1,5 @@
 ﻿//TEST CHANGE
-
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Globalization;
 using System.Collections.Generic;
@@ -12,6 +12,8 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using BarCrawl.Data;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace BarCrawl.Controllers
 {
@@ -28,18 +30,78 @@ namespace BarCrawl.Controllers
         }
         public IActionResult Index()
         {
-            
+
             return View();
         }
 
+        public IActionResult UserPage()
+        {
+            string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            List<Crawl> hey = db.Crawl.Where(a => a.UserID == UserId).ToList();
+            return View(hey);
+        }
+
+        public IActionResult JoinedCrawls()
+        {
+            string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            List<CrawlUser> cu = db.CrawlUser.Include(g => g.crawl).Where(a => a.usersID == UserId).ToList();
+
+
+            return View(cu);
+        }
+
+        public IActionResult CrawlDetails(string ID)
+        {
+            int crawlID = int.Parse(ID);
+            ViewBag.CrawlName = db.Crawl.Find(crawlID).name;
+            List<Barcrawl> bc = db.Barcrawl.Include(g => g.bar).Where(a => a.crawl.CrawlID == crawlID/*int.Parse(crawlID)*/).ToList();
+            List<Bar> cool = new List<Bar>();
+            foreach(Barcrawl ayy in bc)
+            {
+
+                Bar b = new Bar { Name = ayy.bar.Name, Location = ayy.bar.Location };
+                cool.Add(b);
+
+            }
+
+            ViewBag.MapBars = cool;
+            return View(bc);
+
+
+            //Crawl c = db.Crawl.FirstOrDefault(i => i.CrawlID == 14);
+
+            //List<Bar> bars = new List<Bar>();
+            //foreach(Barcrawl bc in c.barCrawl)
+            //{
+            //    Bar b = db.Bar.Find(bc.bar.BarId);
+            //    bars.Add(b);
+            //}
+            //return View(c);
+
+        }
+
+
 
         [HttpPost]
-        public IActionResult CreateCrawlDetail(string name)
+
+        public IActionResult CreateCrawlDetail(string name, DateTime crawlDate)
+
         {
-            Crawl c = new Crawl { name = name };
+            Crawl c = new Crawl { name = name, datetime = crawlDate };
+            c.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             Barcrawl bc = new Barcrawl();
             List<Barcrawl> listBarcrawl = new List<Barcrawl>();
             List<Bar> bar = PossibleBars;
+
+            foreach (Bar b in bar)
+            {
+                if (db.Bar.Where(id => id == b).Count() == 0)
+                {
+                    db.Bar.Add(b);
+                }
+            }
+
             foreach (Bar item in bar)
             {
                 /*
@@ -51,18 +113,23 @@ namespace BarCrawl.Controllers
                 */
                 item.barCrawl.Add(new Barcrawl
                 {
+                    bar = item,
                     crawl = c
                 }
                     );
             }
 
+
+
             db.Crawl.Add(c);
-            db.Bar.AddRange(bar);
+
+
+
             db.SaveChanges();
 
             return RedirectToAction(nameof(Index));
-           
-            
+
+
         }
 
         public List<Bar> GetBars(string location, string rating)
@@ -70,6 +137,7 @@ namespace BarCrawl.Controllers
         {
             //Get all bars in location
             List<Bar> barList = new List<Bar>();
+
 
             for (int i = 0; i < 250; i+=50)
             {
@@ -91,7 +159,7 @@ namespace BarCrawl.Controllers
                     }
                 }
             }
-            
+
 
             return barList;
         }
@@ -153,7 +221,7 @@ namespace BarCrawl.Controllers
 
         public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating)
         {
-            Bar b = new Bar() { Id = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating};
+            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating };
 
             List<Bar> posBars = getCrawlBars(b, 1000, 5);
 
@@ -172,7 +240,7 @@ namespace BarCrawl.Controllers
         public IActionResult Result(string city, string state, string rating, string datetime)
         {
             string location = city + ", " + state;
-            
+
             List<Bar> bars = GetBars(location, rating);
             return View(bars);
         }
@@ -187,36 +255,8 @@ namespace BarCrawl.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
-
-
-        /*
-        public async Task<IActionResult> SaveCrawl(List<Bar> Crawl)
-        {
-            Barcrawl bc = new Barcrawl();
-            bc.crawl = Crawl;
-            if (ModelState.IsValid)
-            {
-                db.Add(bc);
-                await db.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(bc);
-        }
-        
-        /*
-        public IActionResult SaveBar(string id)
-        {
-            Bar saveBar = Bars.FirstOrDefault(v => v.Id == id);
-            if (saveBar != null)
-            {
-                db.bar.Add(saveBar);
-                db.SaveChanges();
-
-            }
-            return View();
-        }
-        */
     }
 }
+
+
+
