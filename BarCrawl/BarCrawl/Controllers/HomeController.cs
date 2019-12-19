@@ -98,28 +98,48 @@ namespace BarCrawl.Controllers
 
             foreach (Bar b in bar)
             {
-                if (db.Bar.Where(BarID => BarID == b).Count() == 0)
+                if (!db.Bar.Where(x => x.BarId == b.BarId).Any())
                 {
                     db.Bar.Add(b);
                 }
-            }
-
-            foreach (Bar item in bar)
-            {
-                /*
-                listBarcrawl.Add(new Barcrawl
+                c.barCrawl.Add(new Barcrawl
                 {
-                    bar = item,
-                    crawl = c,
-                });
-                */
-                item.barCrawl.Add(new Barcrawl
-                {
-                    bar = item,
-                    crawl = c
+                    BarId = b.BarId,
+                    CrawlID = c.CrawlID
                 }
                     );
+                //db.Barcrawl.Add(new Barcrawl
+                //{
+                //    bar = b,
+                //    crawl = c
+                //}
+                //    );
+                //b.barCrawl.Add(new Barcrawl
+                //{
+                //    bar = b,
+                //    crawl = c
+                //}
+                //  );
+
+
             }
+
+            //foreach (Bar item in bar)
+            //{
+            //    /*
+            //    listBarcrawl.Add(new Barcrawl
+            //    {
+            //        bar = item,
+            //        crawl = c,
+            //    });
+            //    */
+            //    item.barCrawl.Add(new Barcrawl
+            //    {
+            //        bar = item,
+            //        crawl = c
+            //    }
+            //        );
+            //}
 
 
 

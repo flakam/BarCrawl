@@ -15,8 +15,16 @@ namespace BarCrawl.Models
         public int id { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public Bar bar { get; set; }
-        public Crawl crawl { get; set; }
+        [ForeignKey("bar")]
+
+        public string BarId { get; set; }
         
+
+        public Crawl crawl { get; set; }
+        [ForeignKey ("crawl")]
+        public int CrawlID { get; set; }
+
+
         public Barcrawl()
         {
             
