@@ -200,6 +200,17 @@ img {
   border-style: none;
 }
 
+.bg {
+    width: 100%;
+    z-index: 0;
+    /* Full height */
+    height: 100%;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 svg {
   overflow: hidden;
   vertical-align: middle;
@@ -4062,8 +4073,9 @@ input[type="button"].btn-block {
 }
 
 .nav-link {
-  display: block;
-  padding: 0.5rem 1rem;
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 20px;
 }
 
 .nav-link:hover, .nav-link:focus {

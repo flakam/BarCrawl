@@ -1,10 +1,13 @@
 @if (User.Identity.IsAuthenticated)
 {
-    <a asp-action="Create">Start a Crawl</a><br />
-    <a asp-action="">Join a Crawl</a><br />
+    <a asp-action="Create">Start a Crawl</a>
+    <br />
+    <a asp-action="">Join a Crawl</a>
+    <br />
 }
 else
 {
+    <img class="bg" src="http://drive.google.com/uc?export=view&id=1c5_J7YpM-c-J5W2qFSM6uQT7DmOq5IgW" />
     <h2>Welcome to Crawlr!</h2>
     <p>The app that lets you drink on YOUR terms.</p>
     <p>
@@ -15,6 +18,7 @@ else
     <br />
     <br />
     <p>To use Crawlr, please log in or sign up!</p>
-    <a asp-area="Identity" asp-page="/Account/Register">Register</a> <br />
+    <a asp-area="Identity" asp-page="/Account/Register">Register</a>
+    <br />
     <a asp-area="Identity" asp-page="/Account/Login">Login</a>
 }
