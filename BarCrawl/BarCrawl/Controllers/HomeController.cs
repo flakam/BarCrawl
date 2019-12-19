@@ -14,6 +14,8 @@ using Newtonsoft.Json.Linq;
 using BarCrawl.Data;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+
 
 namespace BarCrawl.Controllers
 {
@@ -56,6 +58,7 @@ namespace BarCrawl.Controllers
             ViewBag.CrawlName = db.Crawl.Find(crawlID).name;
             List<Barcrawl> bc = db.Barcrawl.Include(g => g.bar).Where(a => a.crawl.CrawlID == crawlID/*int.Parse(crawlID)*/).ToList();
             List<Bar> cool = new List<Bar>();
+            List<string> users = new List<string>();
             foreach(Barcrawl ayy in bc)
             {
 
@@ -63,6 +66,14 @@ namespace BarCrawl.Controllers
                 cool.Add(b);
 
             }
+
+            List<CrawlUser> cu = db.CrawlUser.Where(x => x.crawl.CrawlID == crawlID).ToList();
+            foreach (CrawlUser crus in cu)
+            {
+                string un = db.Users.Find(crus.usersID).UserName;
+                users.Add(un);
+            }
+            ViewBag.Users = users;
 
             ViewBag.MapBars = cool;
             return View(bc);
@@ -96,28 +107,48 @@ namespace BarCrawl.Controllers
 
             foreach (Bar b in bar)
             {
-                if (db.Bar.Where(id => id == b).Count() == 0)
+                if (!db.Bar.Where(x => x.BarId == b.BarId).Any())
                 {
                     db.Bar.Add(b);
                 }
-            }
-
-            foreach (Bar item in bar)
-            {
-                /*
-                listBarcrawl.Add(new Barcrawl
+                c.barCrawl.Add(new Barcrawl
                 {
-                    bar = item,
-                    crawl = c,
-                });
-                */
-                item.barCrawl.Add(new Barcrawl
-                {
-                    bar = item,
-                    crawl = c
+                    BarId = b.BarId,
+                    CrawlID = c.CrawlID
                 }
                     );
+                //db.Barcrawl.Add(new Barcrawl
+                //{
+                //    bar = b,
+                //    crawl = c
+                //}
+                //    );
+                //b.barCrawl.Add(new Barcrawl
+                //{
+                //    bar = b,
+                //    crawl = c
+                //}
+                //  );
+
+
             }
+
+            //foreach (Bar item in bar)
+            //{
+            //    /*
+            //    listBarcrawl.Add(new Barcrawl
+            //    {
+            //        bar = item,
+            //        crawl = c,
+            //    });
+            //    */
+            //    item.barCrawl.Add(new Barcrawl
+            //    {
+            //        bar = item,
+            //        crawl = c
+            //    }
+            //        );
+            //}
 
 
 
@@ -135,12 +166,11 @@ namespace BarCrawl.Controllers
         public List<Bar> GetBars(string location, string rating,string price)
 
         {
-
             //Get all bars in location
             List<Bar> barList = new List<Bar>();
 
 
-            for (int i = 0; i < 150; i+=50)
+            for (int i = 0; i < 250; i+=50)
             {
                 HttpWebRequest request = WebRequest.CreateHttp($"https://api.yelp.com/v3/businesses/search?term=bars&location={location}&price={price}&rating={rating}&radius=5000&offset={i}&limit=50");
                 request.Headers.Add("Authorization", "Bearer 5AZ1TMhzZzb52DbbAMkydLPjNRSURY3x-DtC2o7qDjNTa2n96PSxuLZMmQoBy3WtX5q4EWUh4KQWVG1GG_nq_x2YLEssXjh5WF5kYw8E_VPmyRVMRfDHLwOYM0bXXXYx");
@@ -196,7 +226,7 @@ namespace BarCrawl.Controllers
                 int index = rand.Next(possibleList.Count);
                 point = possibleList[index];
 
-                // Add only if it's not already on the list - not working
+                // Add only if it's not already on the list 
 
                 bool dup = false;
                 foreach (Bar x in crawlList)
@@ -220,13 +250,26 @@ namespace BarCrawl.Controllers
         }
 
 
-        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating)
+        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating, string url, int num)
         {
-            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating };
+            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating, Url = url };
 
-            List<Bar> posBars = getCrawlBars(b, 1000, 5);
+            List<Bar> posBars = getCrawlBars(b, 1200, num);
 
-            //Barcrawl bc = new Barcrawl(posBars);
+            //Use stringbuilder to make string for the gmaps url
+
+            StringBuilder waypointsSB = new StringBuilder();
+            for (int i = 1; i < posBars.Count() - 2; i++)
+            {
+                waypointsSB.Append(posBars[i].Name + " " + posBars[i].Location + '|');
+            }
+            string waypoints = waypointsSB.ToString();
+
+            // Make string play nice with url (no &)
+
+            string waypoints2 = waypoints.Replace("&", "and");
+
+            ViewBag.waypoints = waypoints2;
             PossibleBars = posBars;
             return View(posBars);
         }
@@ -238,12 +281,15 @@ namespace BarCrawl.Controllers
 
 
 
-        public IActionResult Result(string city, string state, string rating, string datetime,string price)
+        public IActionResult Result(string city, string state, string rating, string datetime,string price, int numBars)
         {
             string location = city + ", " + state;
-
-            List<Bar> bars = GetBars(location, rating,price);
-            return View(bars);
+            ViewBag.num = numBars;
+            
+            
+                List<Bar> bars = GetBars(location, rating, price);
+                return View(bars);
+          
         }
 
         public IActionResult Privacy()

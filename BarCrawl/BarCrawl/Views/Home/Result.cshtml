@@ -10,7 +10,7 @@
             <th>
                 Name
             </th>
-           <th>
+            <th>
                 Location
             </th>
 
@@ -32,8 +32,8 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-               <td>
-                    <iframe width="300" height="75" frameborder="1" style="border:1"
+                <td>
+                    <iframe width="300" height="100" frameborder="1" style="border:1"
                             src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&q=@item.Location" allowfullscreen>
                     </iframe>
 
@@ -55,6 +55,8 @@
                                 latitude = item.Latitude,
                                 price = item.Price,
                                 rating = item.Rating,
+                                url = item.Url,
+                                num = ViewBag.num
                             }, null)
                 </td>
 

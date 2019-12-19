@@ -21,39 +21,42 @@
             <th>
                 Rating
             </th>
-            
+           
+
+
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
 
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.bar.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.bar.Location)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.bar.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.bar.Rating)
-                </td>
-                <td>
-
-                    <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-
-                </td>
-            </tr>
+        <tr>
+            <td>
+                <a href=@Html.DisplayFor(modelItem => item.bar.Url) target="_blank">@Html.DisplayFor(modelItem => item.bar.Name)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.bar.Location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.bar.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.bar.Rating)
+            </td>
+        
+        </tr>
         }
     </tbody>
 </table>
 
-<header>
-    <iframe width="600" height="450" frameborder="1" style="border:1"
-            src="https://www.google.com/maps/embed/v1/directions?origin=@ViewBag.MapBars[0].Name@ViewBag.MapBars[0].Location&destination=@ViewBag.MapBars[4].Name@ViewBag.MapBars[4].Location&waypoints=@ViewBag.MapBars[1].Location@ViewBag.MapBars[1].Name|@ViewBag.MapBars[2].Name@ViewBag.MapBars[2].Location|@ViewBag.MapBars[3].Name@ViewBag.MapBars[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+@foreach(string s in ViewBag.Users)
+{
+    @s <br />
+}
 
+<header>
+   @*@ <iframe width="600" height="450" frameborder="1" style="border:1"
+            src="https://www.google.com/maps/embed/v1/directions?origin=@ViewBag.MapBars[0].Name@ViewBag.MapBars[0].Location&destination=@ViewBag.MapBars[4].Name@ViewBag.MapBars[4].Location&waypoints=@ViewBag.MapBars[1].Location@ViewBag.MapBars[1].Name|@ViewBag.MapBars[2].Name@ViewBag.MapBars[2].Location|@ViewBag.MapBars[3].Name@ViewBag.MapBars[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+       *@
 
 </header>

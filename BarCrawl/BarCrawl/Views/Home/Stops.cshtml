@@ -1,11 +1,15 @@
 ﻿@model List<Bar>
 
-<header>
-    <iframe width="600" height="450" frameborder="1" style="border:1"
-            src="https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Location&destination=@Model[4].Location&waypoints=@Model[1].Location|@Model[2].Location|@Model[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+@ViewBag.waypoints
 
+    <header>
+        @*@<iframe width="600" height="450" frameborder="1" style="border:1"
+        src="https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Location&destination=@Model[4].Location&waypoints=@Model[1].Location|@Model[2].Location|@Model[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+        *@
+        <iframe width="600" height="450" frameborder="1" style="border:1"
+                src="https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Location&destination=@Model[Model.Count()-1].Location&waypoints=@ViewBag.waypoints @Model[Model.Count() - 2].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
 
-</header>
+    </header>
 
 
 <table class="table">
@@ -26,6 +30,7 @@
 
 
 
+
         </tr>
     </thead>
     <tbody>
@@ -34,10 +39,10 @@
             <tr>
 
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <a href=@Html.DisplayFor(modelItem => item.Url) target="_blank">@Html.DisplayFor(modelItem => item.Name)</a>
                 </td>
                 <td>
-                    <iframe width="400" height="200" frameborder="1" style="border:1"
+                    <iframe width: 100%; height="200" frameborder="1" style="border:1"
                             src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&location=@item.Latitude,@item.Longitude&heading=210&pitch=5&fov=50" allowfullscreen></iframe>
 
 
