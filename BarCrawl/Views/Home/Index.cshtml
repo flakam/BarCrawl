@@ -2,7 +2,10 @@
 {
     <a asp-action="Create">Start a Crawl</a><br />
     @Html.ActionLink("Join a Crawl", "Index", "Crawl")
+    <br />
 
+    <h2 class="text-center">Upcoming Crawls</h2>
+    <br />
 <table class="table table-bordered table-hover table-striped table-sm">
     <thead>
         <tr>
@@ -23,21 +26,14 @@
         {
         <tr>
             <td>
-                @c.name
+                @Html.ActionLink(c.name, "CrawlDetails", new { id = c.CrawlID }) 
             </td>
             <td>
                 @c.datetime
             </td>
 
             <td>
-
                 @c.Location
-
-            </td>
-
-            <td>
-
-                @Html.ActionLink("Details", "CrawlDetails", new { id = c.CrawlID })
 
             </td>
         </tr>
