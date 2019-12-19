@@ -3,61 +3,72 @@
 @{
     ViewData["Title"] = "CrawlDetails";
 }
-
+    <header>
+        <link rel="stylesheet" href="~/site.css" />
+    </header>
 <h1>@ViewBag.CrawlName</h1>
-<iframe class="route-map" frameborder="1" 
-        
-        src="@ViewBag.gmapurl"
-        allowfullscreen></iframe>
-</iframe>
+<div class="left">
+    <iframe class="route-map" frameborder="1"
+            src="@ViewBag.gmapurl"
+            allowfullscreen></iframe>
+    </iframe>
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Name
-            </th>
-            <th>
-                Location
-            </th>
-            <th>
-                Price
-            </th>
-            <th>
-                Rating
-            </th>
+<div>
+    <h3>Participants:</h3>
+    @foreach (string s in ViewBag.Users)
+    {
+        @s <br />
+    }
+</div>
 
-
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-
+<div class="below">
+    <table class="table">
+        <thead>
+            <h2>Route Stops</h2>
             <tr>
-                <td>
-                    <a href=@Html.DisplayFor(modelItem => item.bar.Url) target="_blank">@Html.DisplayFor(modelItem => item.bar.Name)</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.bar.Location)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.bar.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.bar.Rating)
-                </td>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Location
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Rating
+                </th>
+
+
 
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
 
-@foreach (string s in ViewBag.Users)
-{
-    @s <br />
-}
+                <tr>
+                    <td>
+                        <a href=@Html.DisplayFor(modelItem => item.bar.Url) target="_blank">@Html.DisplayFor(modelItem => item.bar.Name)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.bar.Location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.bar.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.bar.Rating)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
 
 <header>
     @*@ <iframe width="600" height="450" frameborder="1" style="border:1"

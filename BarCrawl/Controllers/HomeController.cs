@@ -80,6 +80,7 @@ namespace BarCrawl.Controllers
             foreach (CrawlUser crus in cu)
             {
                 string un = db.Users.Find(crus.usersID).UserName;
+                un = un.Split("@")[0];
                 users.Add(un);
             }
             ViewBag.Users = users;
@@ -110,6 +111,13 @@ namespace BarCrawl.Controllers
         {
             Crawl c = new Crawl { name = name, datetime = crawlDate };
             c.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //Auto join creator
+            c.crawlUser.Add(new CrawlUser
+            {
+                crawl = c,
+                usersID = c.UserID
+
+            });
 
             Barcrawl bc = new Barcrawl();
             List<Barcrawl> listBarcrawl = new List<Barcrawl>();
