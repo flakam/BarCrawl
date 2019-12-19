@@ -3,60 +3,85 @@
 @{
     ViewData["Title"] = "CrawlDetails";
 }
-
+    <header>
+        <link rel="stylesheet" href="~/site.css" />
+    </header>
 <h1>@ViewBag.CrawlName</h1>
+<div class="left">
+    <iframe class="route-map" frameborder="1"
+            src="@ViewBag.gmapurl"
+            allowfullscreen></iframe>
+    </iframe>
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Name
-            </th>
-            <th>
-                Location
-            </th>
-            <th>
-                Price
-            </th>
-            <th>
-                Rating
-            </th>
-           
+<div>
+    <a asp-controller="Crawl" asp-action="Join" asp-route-id="@ViewBag.CrawlID">Join</a>
+    @ViewBag.alreadyjoined
+
+    <h3>Participants:</h3>
+    @foreach (string s in ViewBag.Users)
+    {
+        @s <br />
+    }
+   
+</div>
+<div style="padding-top:30px">
+    <h2>Theme:</h2>
+    @ViewBag.CrawlTheme
+
+</div>
+
+<div class="below">
+    <table class="table">
+        <thead>
+            <h2>Route Stops</h2>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Location
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Rating
+                </th>
 
 
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
 
-        <tr>
-            <td>
-                <a href=@Html.DisplayFor(modelItem => item.bar.Url) target="_blank">@Html.DisplayFor(modelItem => item.bar.Name)</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.bar.Location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.bar.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.bar.Rating)
-            </td>
-        
-        </tr>
-        }
-    </tbody>
-</table>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
 
-@foreach(string s in ViewBag.Users)
-{
-    @s <br />
-}
+                <tr>
+                    <td>
+                        <a href=@Html.DisplayFor(modelItem => item.bar.Url) target="_blank">@Html.DisplayFor(modelItem => item.bar.Name)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.bar.Location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.bar.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.bar.Rating)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
 
 <header>
-   @*@ <iframe width="600" height="450" frameborder="1" style="border:1"
-            src="https://www.google.com/maps/embed/v1/directions?origin=@ViewBag.MapBars[0].Name@ViewBag.MapBars[0].Location&destination=@ViewBag.MapBars[4].Name@ViewBag.MapBars[4].Location&waypoints=@ViewBag.MapBars[1].Location@ViewBag.MapBars[1].Name|@ViewBag.MapBars[2].Name@ViewBag.MapBars[2].Location|@ViewBag.MapBars[3].Name@ViewBag.MapBars[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
-       *@
+    @*@ <iframe width="600" height="450" frameborder="1" style="border:1"
+        src="https://www.google.com/maps/embed/v1/directions?origin=@ViewBag.MapBars[0].Name@ViewBag.MapBars[0].Location&destination=@ViewBag.MapBars[4].Name@ViewBag.MapBars[4].Location&waypoints=@ViewBag.MapBars[1].Location@ViewBag.MapBars[1].Name|@ViewBag.MapBars[2].Name@ViewBag.MapBars[2].Location|@ViewBag.MapBars[3].Name@ViewBag.MapBars[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+    *@
 
 </header>

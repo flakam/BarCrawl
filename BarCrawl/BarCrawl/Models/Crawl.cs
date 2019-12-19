@@ -22,6 +22,8 @@ namespace BarCrawl.Models
         public DateTime datetime { get; set; }
         public List<CrawlUser> crawlUser { get; set; } = new List<CrawlUser>();
         public List<Barcrawl> barCrawl { get; set; } = new List<Barcrawl>();
+        public string Location { get; set; }
+        public string Theme { get; set; }
 
         public Crawl()
         {

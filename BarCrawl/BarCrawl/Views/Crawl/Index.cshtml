@@ -28,9 +28,9 @@
                 @Html.DisplayFor(modelItem => item.DateCreated)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CrawlID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CrawlID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CrawlID">Delete</a>
+               
+                <a asp-controller="Home" asp-action="CrawlDetails" asp-route-id="@item.CrawlID">Details</a> |
+               
                 <a asp-action="Join" asp-route-id="@item.CrawlID">Join</a>
             </td>
         </tr>

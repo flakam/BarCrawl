@@ -6,34 +6,34 @@
         <div align="left">
 
             <!--PICK STATE & CITY-->
-            State: &nbsp
+            State:<br />
 
             <input type="hidden" name="country" id="countryId" value="US" />
             <select name="state" class="states order-alpha" id="stateId">
                 <option value="">Select State</option>
-            </select><br /><br />
-            City:&nbsp &nbsp;
+            </select></br>
+            City:<br />
             <select name="city" class="cities order-pop limit-pop-20000" id="cityId">
-                <option value="">Select City</option>
-            </select><br /><br />
-            Price:&nbsp &nbsp;
-            <select name="price" required>
+                <option value="">Select City</option></br>
+            </select></br>
+            Max Price:<br />
+            <select name="price"  required>
 
                 <option value="1">$</option>
                 <option value="1,2" min="1" max="2">$$</option>
                 <option value="1,2,3" min="1" max="3">$$$</option>
-                <option value="1,2,3,4" min="1" max="4">$$$$</option>
-            </select><br /><br />
+                <option selected="selected"value="1,2,3,4" min="1" max="4">$$$$</option>
+            </select>
 
             <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-            <script src="//geodata.solutions/includes/statecity.js"></script>
+            <script src="//geodata.solutions/includes/statecity.js"></script></br>
 
-            Number of Stops: &nbsp
+            Select Number of Stops: <br />
             <input type="number" name="numBars" />
-            <br /><br />
+            <br />
 
 
-            Minimum Yelp rating (1-5) :&nbsp
+            Minimum Yelp rating (1-5) : <br />
             <input type="number" name="rating" min="1" max="5" required /> <br /><br /><br />
 
             <input type="submit" class="btn btn-primary" value="Submit">

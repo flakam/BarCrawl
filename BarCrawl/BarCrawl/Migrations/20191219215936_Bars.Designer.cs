@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BarCrawl.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191213001102_CrawlBases")]
-    partial class CrawlBases
+    [Migration("20191219215936_Bars")]
+    partial class Bars
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -26,17 +26,17 @@ namespace BarCrawl.Migrations
                     b.Property<string>("BarId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<double>("Latitude");
+                    b.Property<string>("Id");
 
                     b.Property<string>("Location");
-
-                    b.Property<double>("Longitude");
 
                     b.Property<string>("Name");
 
                     b.Property<string>("Price");
 
                     b.Property<string>("Rating");
+
+                    b.Property<string>("Url");
 
                     b.HasKey("BarId");
 
@@ -51,7 +51,7 @@ namespace BarCrawl.Migrations
 
                     b.Property<string>("BarId");
 
-                    b.Property<int?>("CrawlID");
+                    b.Property<int>("CrawlID");
 
                     b.Property<DateTime>("CreatedDate");
 
@@ -71,6 +71,14 @@ namespace BarCrawl.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateCreated");
+
+                    b.Property<string>("Location");
+
+                    b.Property<string>("Theme");
+
+                    b.Property<string>("UserID");
+
+                    b.Property<DateTime>("datetime");
 
                     b.Property<string>("name");
 
@@ -269,7 +277,8 @@ namespace BarCrawl.Migrations
 
                     b.HasOne("BarCrawl.Models.Crawl", "crawl")
                         .WithMany("barCrawl")
-                        .HasForeignKey("CrawlID");
+                        .HasForeignKey("CrawlID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BarCrawl.Models.CrawlUser", b =>

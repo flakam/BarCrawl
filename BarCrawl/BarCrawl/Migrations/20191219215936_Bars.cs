@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BarCrawl.Migrations
 {
-    public partial class initial1 : Migration
+    public partial class Bars : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -53,10 +53,11 @@ namespace BarCrawl.Migrations
                 {
                     BarId = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    Longitude = table.Column<double>(nullable: false),
-                    Latitude = table.Column<double>(nullable: false),
                     Location = table.Column<string>(nullable: true),
-                    Price = table.Column<string>(nullable: true)
+                    Price = table.Column<string>(nullable: true),
+                    Rating = table.Column<string>(nullable: true),
+                    Url = table.Column<string>(nullable: true),
+                    Id = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -70,7 +71,11 @@ namespace BarCrawl.Migrations
                     CrawlID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     name = table.Column<string>(nullable: true),
-                    DateCreated = table.Column<DateTime>(nullable: false)
+                    UserID = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    datetime = table.Column<DateTime>(nullable: false),
+                    Location = table.Column<string>(nullable: true),
+                    Theme = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -191,7 +196,7 @@ namespace BarCrawl.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     BarId = table.Column<string>(nullable: true),
-                    CrawlID = table.Column<int>(nullable: true)
+                    CrawlID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -207,7 +212,7 @@ namespace BarCrawl.Migrations
                         column: x => x.CrawlID,
                         principalTable: "CrawlTable",
                         principalColumn: "CrawlID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

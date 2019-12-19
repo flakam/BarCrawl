@@ -32,8 +32,19 @@ namespace BarCrawl.Controllers
         }
         public IActionResult Index()
         {
+      
+           ViewBag.Upcoming = UpcomingCrawls();
 
             return View();
+        }
+
+        public List<Crawl> UpcomingCrawls()
+       {
+            List<Crawl> upcomingCrawls = db.Crawl.Where(x => x.datetime < DateTime.Now.AddDays(30)).ToList();
+
+
+            return upcomingCrawls;
+
         }
 
         public IActionResult UserPage()
@@ -55,7 +66,11 @@ namespace BarCrawl.Controllers
         public IActionResult CrawlDetails(string ID)
         {
             int crawlID = int.Parse(ID);
-            ViewBag.CrawlName = db.Crawl.Find(crawlID).name;
+            ViewBag.CrawlID = crawlID;
+            Crawl c = db.Crawl.Find(crawlID);
+            ViewBag.CrawlName = c.name;
+            ViewBag.CrawlTheme = c.Theme;
+
             List<Barcrawl> bc = db.Barcrawl.Include(g => g.bar).Where(a => a.crawl.CrawlID == crawlID/*int.Parse(crawlID)*/).ToList();
             List<Bar> cool = new List<Bar>();
             List<string> users = new List<string>();
@@ -71,9 +86,11 @@ namespace BarCrawl.Controllers
             foreach (CrawlUser crus in cu)
             {
                 string un = db.Users.Find(crus.usersID).UserName;
+                un = un.Split("@")[0];
                 users.Add(un);
             }
             ViewBag.Users = users;
+            ViewBag.gmapurl = GMapUrlBuilder(cool);
 
             ViewBag.MapBars = cool;
             return View(bc);
@@ -95,11 +112,22 @@ namespace BarCrawl.Controllers
 
         [HttpPost]
 
-        public IActionResult CreateCrawlDetail(string name, DateTime crawlDate)
+        public IActionResult CreateCrawlDetail(string name,  DateTime crawlDate, bool haveTheme, string Theme)
 
         {
-            Crawl c = new Crawl { name = name, datetime = crawlDate };
+            
+            Crawl c = new Crawl { name = name, datetime = crawlDate, Theme = Theme };
             c.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+
+            //Auto join creator
+            c.crawlUser.Add(new CrawlUser
+            {
+                crawl = c,
+                usersID = c.UserID
+
+
+            });
 
             Barcrawl bc = new Barcrawl();
             List<Barcrawl> listBarcrawl = new List<Barcrawl>();
@@ -114,51 +142,31 @@ namespace BarCrawl.Controllers
                 c.barCrawl.Add(new Barcrawl
                 {
                     BarId = b.BarId,
-                    CrawlID = c.CrawlID
+                    CrawlID = c.CrawlID,
+
                 }
                     );
-                //db.Barcrawl.Add(new Barcrawl
-                //{
-                //    bar = b,
-                //    crawl = c
-                //}
-                //    );
-                //b.barCrawl.Add(new Barcrawl
-                //{
-                //    bar = b,
-                //    crawl = c
-                //}
-                //  );
-
-
             }
+            string[] bob = bar[0].Location.Split(',');
 
-            //foreach (Bar item in bar)
-            //{
-            //    /*
-            //    listBarcrawl.Add(new Barcrawl
-            //    {
-            //        bar = item,
-            //        crawl = c,
-            //    });
-            //    */
-            //    item.barCrawl.Add(new Barcrawl
-            //    {
-            //        bar = item,
-            //        crawl = c
-            //    }
-            //        );
-            //}
+            string qwer = bob[1] + bob[2];
+            string qwert = qwer.Replace("]", "");
+            string qwerty = qwert.Replace("\"", "");
+            string[] qwertyu = qwerty.Split(' ');
+            c.Location = qwertyu[2] + ", " + qwertyu[3];
+          
 
 
 
             db.Crawl.Add(c);
 
-
+            
 
             db.SaveChanges();
+            string id = c.CrawlID.ToString();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("CrawlDetails", new { id = id});
+                
 
 
         }
@@ -249,27 +257,64 @@ namespace BarCrawl.Controllers
             return crawlList;
         }
 
+        public string GMapUrlBuilder(List<Bar> bars)
+        {
+            
+            //https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Location&destination=@Model[Model.Count()-1].Location@ViewBag.waypoints&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+            
+            StringBuilder urlSB = new StringBuilder();
+            foreach (Bar b in bars)
+            {
+                b.Name = b.Name.Replace("&", "and");
+                b.Name = b.Name.Replace("'", "");
+                //b.Name = b.Name.Replace(",", "");
+               
+
+            }
+
+            urlSB.Append("https://www.google.com/maps/embed/v1/directions?origin=" + bars[0].Name + bars[0].Location);
+            urlSB.Append("&destination=" + bars[bars.Count - 1].Name + bars[bars.Count - 1].Location);
+
+            
+            if (bars.Count > 2)
+            {
+                urlSB.Append("&waypoints=");
+                for (int i = 1; i < bars.Count() - 2; i++)
+                {
+                    urlSB.Append(bars[i].Name + " " + bars[i].Location + '|');
+                }
+                urlSB.Append(bars[bars.Count - 2].Name + " " + bars[bars.Count - 2].Location);
+            }
+
+            urlSB.Append("&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking");
+            string url = urlSB.ToString();
+            
+            
+            return url;
+        }
+        
+        public string BarAddress(Bar b)
+        {
+            
+            
+                string temp = b.Location;
+                temp = temp.Split(",")[0];
+                temp = temp.Replace("[", "");
+                temp = temp.Replace("\"", "");
+            
+
+            return temp;
+        }
 
         public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating, string url, int num)
         {
-            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating, Url = url };
+            Bar b = new Bar() { BarId = id, Name = name, Location = location, Price = price, Rating = rating, Url = url };
 
             List<Bar> posBars = getCrawlBars(b, 1200, num);
 
-            //Use stringbuilder to make string for the gmaps url
+            
 
-            StringBuilder waypointsSB = new StringBuilder();
-            for (int i = 1; i < posBars.Count() - 2; i++)
-            {
-                waypointsSB.Append(posBars[i].Name + " " + posBars[i].Location + '|');
-            }
-            string waypoints = waypointsSB.ToString();
-
-            // Make string play nice with url (no &)
-
-            string waypoints2 = waypoints.Replace("&", "and");
-
-            ViewBag.waypoints = waypoints2;
+            ViewBag.gmapurl = GMapUrlBuilder(posBars);
             PossibleBars = posBars;
             return View(posBars);
         }
@@ -285,11 +330,8 @@ namespace BarCrawl.Controllers
         {
             string location = city + ", " + state;
             ViewBag.num = numBars;
-            
-            
-                List<Bar> bars = GetBars(location, rating, price);
-                return View(bars);
-          
+            List<Bar> bars = GetBars(location, rating,price);
+            return View(bars);
         }
 
         public IActionResult Privacy()
