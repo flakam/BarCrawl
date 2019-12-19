@@ -32,7 +32,9 @@ namespace BarCrawl.Controllers
         }
         public IActionResult Index()
         {
+      
             ViewBag.Upcoming = UpcomingCrawls();
+
             return View();
         }
 
@@ -65,7 +67,10 @@ namespace BarCrawl.Controllers
         {
             int crawlID = int.Parse(ID);
             ViewBag.CrawlID = crawlID;
-            ViewBag.CrawlName = db.Crawl.Find(crawlID).name;
+            Crawl c = db.Crawl.Find(crawlID);
+            ViewBag.CrawlName = c.name;
+            ViewBag.CrawlTheme = c.Theme;
+
             List<Barcrawl> bc = db.Barcrawl.Include(g => g.bar).Where(a => a.crawl.CrawlID == crawlID/*int.Parse(crawlID)*/).ToList();
             List<Bar> cool = new List<Bar>();
             List<string> users = new List<string>();
@@ -107,17 +112,20 @@ namespace BarCrawl.Controllers
 
         [HttpPost]
 
-        public IActionResult CreateCrawlDetail(string name, DateTime crawlDate)
+        public IActionResult CreateCrawlDetail(string name,  DateTime crawlDate, bool haveTheme, string Theme)
 
         {
-            Crawl c = new Crawl { name = name, datetime = crawlDate };
+            
+            Crawl c = new Crawl { name = name, datetime = crawlDate, Theme = Theme };
             c.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
 
             //Auto join creator
             c.crawlUser.Add(new CrawlUser
             {
                 crawl = c,
                 usersID = c.UserID
+
 
             });
 
@@ -285,9 +293,22 @@ namespace BarCrawl.Controllers
             return url;
         }
         
+        public string BarAddress(Bar b)
+        {
+            
+            
+                string temp = b.Location;
+                temp = temp.Split(",")[0];
+                temp = temp.Replace("[", "");
+                temp = temp.Replace("\"", "");
+            
+
+            return temp;
+        }
+
         public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating, string url, int num)
         {
-            Bar b = new Bar() { BarId = id, Name = name, Location = location, Latitude = latitude, Longitude = longitude, Price = price, Rating = rating, Url = url };
+            Bar b = new Bar() { BarId = id, Name = name, Location = location, Price = price, Rating = rating, Url = url };
 
             List<Bar> posBars = getCrawlBars(b, 1200, num);
 

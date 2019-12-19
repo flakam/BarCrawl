@@ -1,4 +1,7 @@
 ﻿@model List<Bar>
+
+
+
 <h2>Route Map</h2>
 <header>
     <link rel="stylesheet" href="~/site.css" />
@@ -14,19 +17,22 @@
 
     </div>
 <div class="right">
-    <form asp-action="CreateCrawlDetail">
+    <form asp-action="CreateCrawlDetail" method="post">
         <h2>Create</h2>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label class="control-label">Crawl Name:</label>
-            <input name="name" id="name" class="form-control" />
+            <input name="name" id="name" class="form-control" required/>
 
         </div>
         <label for="datetime">Date and Time:</label><br />
 
         <input type="datetime-local" id="crawlDate"
-               name="crawlDate"><br />
-        <br/>
+               name="crawlDate" required><br />
+        <br />
+        Theme:
+        <input type="text" name="Theme" id="Theme" placeholder="Optional" />
+        <br />  
         <div class="form-group">
             <input type="submit" value="Create" class="btn btn-primary" />
         </div>
@@ -70,7 +76,7 @@
                     </td>
                     <td>
                         <iframe width="600" height="100" frameborder="1" style="border:1"
-                                src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&location=@item.Latitude,@item.Longitude&heading=210&pitch=5&fov=50" allowfullscreen></iframe>
+                                src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&location=@item.Location&heading=210&pitch=5&fov=50" allowfullscreen></iframe>
 
                     </td>
                     <td>

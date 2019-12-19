@@ -35,20 +35,20 @@ namespace BarCrawl.Controllers
             }
             else
             {
-                if (_context.CrawlUser.Where(x => x.usersID == User.FindFirstValue(ClaimTypes.NameIdentifier) 
-                && x.crawl.CrawlID == crawl.CrawlID) == null)
-                {
+                //if (_context.CrawlUser.Where(x => x.usersID == User.FindFirstValue(ClaimTypes.NameIdentifier) 
+                //&& x.crawl.CrawlID == crawl.CrawlID) == null)
+                //{
                     CrawlUser cu = new CrawlUser();
                     // cu.crawl = crawl;
                     cu.usersID = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                     crawl.crawlUser.Add(cu);
                     _context.SaveChanges();
-                }
-                else
-                {
-                    ViewBag.alreadyjoined = "You are already a member of this Crawl";
-                }
+                //}
+                //else
+                //{
+                //    ViewBag.alreadyjoined = "You are already a member of this Crawl";
+                //}
                 
             }
 
