@@ -141,11 +141,13 @@ namespace BarCrawl.Controllers
 
             db.Crawl.Add(c);
 
-
+            
 
             db.SaveChanges();
+            string id = c.CrawlID.ToString();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("CrawlDetails", new { id = id});
+                
 
 
         }

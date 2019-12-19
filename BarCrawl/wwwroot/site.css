@@ -54,3 +54,29 @@ body {
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.route-map {
+    width:75%;
+    height:400px;
+    position:center;
+}
+
+.left{
+    float:left;
+    width:75%;
+    position:relative;
+}
+
+.right{
+    float:right;
+    width:25%;
+    position:relative;
+    padding-right:60px;
+    padding-top:40px;
+}
+
+.below{
+    padding-top:415px;
+}
+
+
