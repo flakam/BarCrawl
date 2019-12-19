@@ -35,15 +35,24 @@ namespace BarCrawl.Controllers
             }
             else
             {
-                CrawlUser cu = new CrawlUser();
-               // cu.crawl = crawl;
-                cu.usersID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (_context.CrawlUser.Where(x => x.usersID == User.FindFirstValue(ClaimTypes.NameIdentifier) 
+                && x.crawl.CrawlID == crawl.CrawlID) == null)
+                {
+                    CrawlUser cu = new CrawlUser();
+                    // cu.crawl = crawl;
+                    cu.usersID = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                crawl.crawlUser.Add(cu);
-                _context.SaveChanges();
+                    crawl.crawlUser.Add(cu);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    ViewBag.alreadyjoined = "You are already a member of this Crawl";
+                }
+                
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("CrawlDetails", "Home", new { id = crawl.CrawlID});
             //return View(crawl);
         }
 

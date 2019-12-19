@@ -15,6 +15,9 @@
 </div>
 
 <div>
+    <a asp-controller="Crawl" asp-action="Join" asp-route-id="@ViewBag.CrawlID">Join</a>
+    @ViewBag.alreadyjoined
+
     <h3>Participants:</h3>
     @foreach (string s in ViewBag.Users)
     {

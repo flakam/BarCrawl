@@ -64,6 +64,7 @@ namespace BarCrawl.Controllers
         public IActionResult CrawlDetails(string ID)
         {
             int crawlID = int.Parse(ID);
+            ViewBag.CrawlID = crawlID;
             ViewBag.CrawlName = db.Crawl.Find(crawlID).name;
             List<Barcrawl> bc = db.Barcrawl.Include(g => g.bar).Where(a => a.crawl.CrawlID == crawlID/*int.Parse(crawlID)*/).ToList();
             List<Bar> cool = new List<Bar>();
@@ -111,6 +112,7 @@ namespace BarCrawl.Controllers
         {
             Crawl c = new Crawl { name = name, datetime = crawlDate };
             c.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             //Auto join creator
             c.crawlUser.Add(new CrawlUser
             {
