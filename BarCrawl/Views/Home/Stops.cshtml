@@ -2,7 +2,7 @@
 
 <header>
     <iframe width="600" height="450" frameborder="1" style="border:1"
-            src="https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Location&destination=@Model[4].Location&waypoints=@Model[1].Location|@Model[2].Location|@Model[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+            src="https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Name@Model[0].Location&destination=@Model[4].Name@Model[4].Location&waypoints=@Model[1].Name@Model[1].Location|@Model[2].Name@Model[2].Location|@Model[3].Name@Model[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
 
 
 </header>
@@ -11,6 +11,9 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+            Bar NO.
+            </th>
             <th>
                 Name
             </th>
@@ -29,10 +32,13 @@
         </tr>
     </thead>
     <tbody>
+        @{int rowNo = 0;}
         @foreach (var item in Model)
         {
             <tr>
-
+                <td>
+                    @{rowNo++; @rowNo}
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
@@ -49,9 +55,80 @@
                     @Html.DisplayFor(modelItem => item.Rating)
                 </td>
             </tr>
-        }
+                        }
     </tbody>
 </table>
+
+
+<h2>Directions</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                From
+            </th>
+            <th>
+                To
+            </th>
+            <th>
+                Route
+            </th>
+            <th>
+                Description
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+
+            @foreach (var item in Model)
+            {
+                <td>
+
+             
+                        @{rowNo++; @rowNo}
+                        @Html.DisplayFor(modelItem => item.Name)
+                 
+
+                </td>
+        
+                <td>
+                    To
+               </td>
+
+               <td>
+                   Route
+
+               </td>
+
+<td> 
+    Description
+            </td>
+
+            }
+
+
+            @*@for (int i = 0; i <= 5; i++)
+        {
+            <td>
+                <iframe width="600" height="450" frameborder="1" style="border:1"
+                        src="https://www.google.com/maps/embed/v1/directions?origin=@Model[i].Location&destination=Model[i+1].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
+            </td>
+        }*@
+
+            }
+        </tr>
+        
+    </tbody>
+</table>
+
+
+
+
+
+
+
 
 Would you like to Save/Share this Bar Crawl? Or reroll?
 
