@@ -2,6 +2,48 @@
 {
     <a asp-action="Create">Start a Crawl</a><br />
     @Html.ActionLink("Join a Crawl", "Index", "Crawl")
+
+<table class="table table-bordered table-hover table-striped table-sm">
+    <thead>
+        <tr>
+            <th>
+                Crawl Name
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Location
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Crawl c in ViewBag.Upcoming)
+        {
+        <tr>
+            <td>
+                @c.name
+            </td>
+            <td>
+                @c.datetime
+            </td>
+
+            <td>
+
+                @c.Location
+
+            </td>
+
+            <td>
+
+                @Html.ActionLink("Details", "CrawlDetails", new { id = c.CrawlID })
+
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
 }
 else
 {
