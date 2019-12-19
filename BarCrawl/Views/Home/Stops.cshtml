@@ -1,83 +1,94 @@
 ﻿@model List<Bar>
 
-@ViewBag.waypoints
-
-    <header>
-        @*@<iframe width="600" height="450" frameborder="1" style="border:1"
-        src="https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Location&destination=@Model[4].Location&waypoints=@Model[1].Location|@Model[2].Location|@Model[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
-        *@
-        <iframe width="600" height="450" frameborder="1" style="border:1"
-                src="https://www.google.com/maps/embed/v1/directions?origin=@Model[0].Location&destination=@Model[Model.Count()-1].Location&waypoints=@ViewBag.waypoints @Model[Model.Count() - 2].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
-
-    </header>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Name
-            </th>
-            <th>
-                Location
-            </th>
-            <th>
-                Price
-            </th>
-            <th>
-                Rating
-            </th>
+<h2>Route Map</h2>
+<header>
+    <link rel="stylesheet" href="~/site.css" />
+</header>
 
+<div class="map-n-stuff">
+    <div class="left">
 
+        <iframe class="route-map" frameborder="1"
+                src="@ViewBag.gmapurl"
+                allowfullscreen></iframe>
+        </iframe>
 
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-
-                <td>
-                    <a href=@Html.DisplayFor(modelItem => item.Url) target="_blank">@Html.DisplayFor(modelItem => item.Name)</a>
-                </td>
-                <td>
-                    <iframe width="400" height="200" frameborder="1" style="border:1"
-                            src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&location=@item.Latitude,@item.Longitude&heading=210&pitch=5&fov=50" allowfullscreen></iframe>
-
-
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Rating)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-Would you like to Save/Share this Bar Crawl? Or reroll?
-
-
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateCrawlDetail">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label class="control-label">Name</label>
-                <input name="name" id="name" class="form-control" />
-
-            </div>
-            <label for="datetime">Schedule the BarCrawl:</label><br />
-
-            <input type="datetime-local" id="crawlDate"
-                   name="crawlDate"><br />
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
     </div>
+<div class="right">
+    <form asp-action="CreateCrawlDetail" method="post">
+        <h2>Create</h2>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label class="control-label">Crawl Name:</label>
+            <input name="name" id="name" class="form-control" required/>
+
+        </div>
+        <label for="datetime">Date and Time:</label><br />
+
+        <input type="datetime-local" id="crawlDate"
+               name="crawlDate" required><br />
+        <br />
+        Theme:
+        <input type="text" name="Theme" id="Theme" placeholder="Optional" />
+        <br />  
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
+   </div>    
+  
+<br />
+
+<div class="below">
+    <h2>Route Stops</h2>
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Location
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Rating
+                </th>
+
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        <a href=@Html.DisplayFor(modelItem => item.Url) target="_blank">@Html.DisplayFor(modelItem => item.Name)</a>
+                    </td>
+                    <td>
+                        <iframe width="600" height="100" frameborder="1" style="border:1"
+                                src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&location=@item.Location&heading=210&pitch=5&fov=50" allowfullscreen></iframe>
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rating)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
