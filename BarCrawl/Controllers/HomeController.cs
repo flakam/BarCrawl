@@ -32,8 +32,17 @@ namespace BarCrawl.Controllers
         }
         public IActionResult Index()
         {
-
+            ViewBag.Upcoming = UpcomingCrawls();
             return View();
+        }
+
+        public List<Crawl> UpcomingCrawls()
+        {
+            List<Crawl> upcomingCrawls = db.Crawl.Where(x => x.datetime < DateTime.Now.AddDays(30)).ToList();
+
+
+            return upcomingCrawls;
+
         }
 
         public IActionResult UserPage()
@@ -114,41 +123,19 @@ namespace BarCrawl.Controllers
                 c.barCrawl.Add(new Barcrawl
                 {
                     BarId = b.BarId,
-                    CrawlID = c.CrawlID
+                    CrawlID = c.CrawlID,
+
                 }
                     );
-                //db.Barcrawl.Add(new Barcrawl
-                //{
-                //    bar = b,
-                //    crawl = c
-                //}
-                //    );
-                //b.barCrawl.Add(new Barcrawl
-                //{
-                //    bar = b,
-                //    crawl = c
-                //}
-                //  );
-
-
             }
+            string[] bob = bar[0].Location.Split(',');
 
-            //foreach (Bar item in bar)
-            //{
-            //    /*
-            //    listBarcrawl.Add(new Barcrawl
-            //    {
-            //        bar = item,
-            //        crawl = c,
-            //    });
-            //    */
-            //    item.barCrawl.Add(new Barcrawl
-            //    {
-            //        bar = item,
-            //        crawl = c
-            //    }
-            //        );
-            //}
+            string qwer = bob[1] + bob[2];
+            string qwert = qwer.Replace("]", "");
+            string qwerty = qwert.Replace("\"", "");
+            string[] qwertyu = qwerty.Split(' ');
+            c.Location = qwertyu[2] + ", " + qwertyu[3];
+          
 
 
 
