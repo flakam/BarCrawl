@@ -58,6 +58,7 @@ namespace BarCrawl.Controllers
             ViewBag.CrawlName = db.Crawl.Find(crawlID).name;
             List<Barcrawl> bc = db.Barcrawl.Include(g => g.bar).Where(a => a.crawl.CrawlID == crawlID/*int.Parse(crawlID)*/).ToList();
             List<Bar> cool = new List<Bar>();
+            List<string> users = new List<string>();
             foreach(Barcrawl ayy in bc)
             {
 
@@ -65,6 +66,14 @@ namespace BarCrawl.Controllers
                 cool.Add(b);
 
             }
+
+            List<CrawlUser> cu = db.CrawlUser.Where(x => x.crawl.CrawlID == crawlID).ToList();
+            foreach (CrawlUser crus in cu)
+            {
+                string un = db.Users.Find(crus.usersID).UserName;
+                users.Add(un);
+            }
+            ViewBag.Users = users;
 
             ViewBag.MapBars = cool;
             return View(bc);
