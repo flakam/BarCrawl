@@ -26,8 +26,12 @@
    
 </div>
 <div style="padding-top:30px">
-    <h2>Theme:</h2>
-    @ViewBag.CrawlTheme
+    @if (ViewBag.CrawlTheme != null)
+    {
+        <h2>Theme:</h2>
+        @ViewBag.CrawlTheme
+    }
+
 
 </div>
 
@@ -62,7 +66,9 @@
                         <a href=@Html.DisplayFor(modelItem => item.bar.Url) target="_blank">@Html.DisplayFor(modelItem => item.bar.Name)</a>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.bar.Location)
+                        <iframe width="600" height="100" frameborder="1" style="border:1"
+                                src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&location=@item.bar.Latitude,@item.bar.Longitude&heading=210&pitch=5&fov=50" allowfullscreen></iframe>
+
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.bar.Price)
@@ -79,9 +85,3 @@
 
 
 
-<header>
-    @*@ <iframe width="600" height="450" frameborder="1" style="border:1"
-        src="https://www.google.com/maps/embed/v1/directions?origin=@ViewBag.MapBars[0].Name@ViewBag.MapBars[0].Location&destination=@ViewBag.MapBars[4].Name@ViewBag.MapBars[4].Location&waypoints=@ViewBag.MapBars[1].Location@ViewBag.MapBars[1].Name|@ViewBag.MapBars[2].Name@ViewBag.MapBars[2].Location|@ViewBag.MapBars[3].Name@ViewBag.MapBars[3].Location&key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&mode=walking" allowfullscreen></iframe>
-    *@
-
-</header>
