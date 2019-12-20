@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Crawl List</h1>
 
 <table class="table">
     <thead>
@@ -15,7 +15,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.DateCreated)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            
         </tr>
     </thead>
     <tbody>
@@ -25,12 +28,15 @@
                 @Html.DisplayFor(modelItem => item.name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
+                @Html.DisplayFor(modelItem => item.datetime)
             </td>
             <td>
-               
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td>
+
                 <a asp-controller="Home" asp-action="CrawlDetails" asp-route-id="@item.CrawlID">Details</a> |
-               
+
                 <a asp-action="Join" asp-route-id="@item.CrawlID">Join</a>
             </td>
         </tr>

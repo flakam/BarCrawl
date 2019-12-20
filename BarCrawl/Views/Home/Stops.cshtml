@@ -28,7 +28,7 @@
         <label for="datetime">Date and Time:</label><br />
 
         <input type="datetime-local" id="crawlDate"
-               name="crawlDate" required><br />
+               name="crawlDate" min="@DateTime.Now" required><br />
         <br />
         Theme:
         <input type="text" name="Theme" id="Theme" placeholder="Optional" />
@@ -76,7 +76,7 @@
                     </td>
                     <td>
                         <iframe width="600" height="100" frameborder="1" style="border:1"
-                                src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&location=@item.Location&heading=210&pitch=5&fov=50" allowfullscreen></iframe>
+                                src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBdac79PQX5UeDPlBxeExEgtE0dYxQmG8s&location=@item.Latitude,@item.Longitude&heading=210&pitch=5&fov=50" allowfullscreen></iframe>
 
                     </td>
                     <td>

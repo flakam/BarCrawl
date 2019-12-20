@@ -30,6 +30,19 @@ namespace BarCrawl.Controllers
         {
             db = context;
         }
+
+        //public async Task<IActionResult> Expire()
+        //{
+        //    List<Crawl> rejects = db.Crawl.Where(x => x.datetime < DateTime.Now.AddDays(-3)).ToList();
+        //    foreach(Crawl c in rejects)
+        //    {
+        //        db.Crawl.Remove(c);
+                
+        //        await db.SaveChangesAsync();
+                
+        //    }
+        //    return RedirectToAction(nameof(Index));
+        //}
         public IActionResult Index()
         {
       
@@ -40,7 +53,8 @@ namespace BarCrawl.Controllers
 
         public List<Crawl> UpcomingCrawls()
         {
-            List<Crawl> upcomingCrawls = db.Crawl.Where(x => x.datetime < DateTime.Now.AddDays(30)).ToList();
+            List<Crawl> upcomingCrawls = db.Crawl.Where(x => x.datetime < DateTime.Now.AddDays(30) 
+            && x.datetime > DateTime.Now).ToList();
 
 
             return upcomingCrawls;
@@ -57,7 +71,8 @@ namespace BarCrawl.Controllers
         public IActionResult JoinedCrawls()
         {
             string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            List<CrawlUser> cu = db.CrawlUser.Include(g => g.crawl).Where(a => a.usersID == UserId).ToList();
+            List<CrawlUser> cu = db.CrawlUser.Include(g => g.crawl).Where(a => a.usersID == UserId
+            && a.crawl.datetime > (DateTime.Now.AddDays(-3))).ToList();
 
 
             return View(cu);
@@ -306,9 +321,9 @@ namespace BarCrawl.Controllers
             return temp;
         }
 
-        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating, string url, int num)
+        public IActionResult Stops(string id, string name, string location, double longitude, double latitude, string price, string rating, string url, int num, string picurl)
         {
-            Bar b = new Bar() { BarId = id, Name = name, Location = location, Price = price, Rating = rating, Url = url };
+            Bar b = new Bar() { BarId = id, Name = name, Location = location, Price = price, Rating = rating, Url = url, Latitude = latitude, Longitude = longitude, PicUrl = picurl };
 
             List<Bar> posBars = getCrawlBars(b, 1200, num);
 
