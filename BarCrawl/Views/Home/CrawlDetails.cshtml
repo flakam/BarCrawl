@@ -1,11 +1,14 @@
 ﻿@model IEnumerable<BarCrawl.Models.Barcrawl>
 
+
+
+
 @{
     ViewData["Title"] = "CrawlDetails";
 }
-    <header>
-        <link rel="stylesheet" href="~/site.css" />
-    </header>
+<header>
+    <link rel="stylesheet" href="~/site.css" />
+</header>
 <h1>@ViewBag.CrawlName</h1>
 <div class="left">
     <iframe class="route-map" frameborder="1"
@@ -23,7 +26,7 @@
     {
         @s <br />
     }
-   
+
 </div>
 <div style="padding-top:30px">
     @if (ViewBag.CrawlTheme != null)
@@ -81,6 +84,9 @@
             }
         </tbody>
     </table>
+    
+
+           
 </div>
 
 
