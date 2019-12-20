@@ -17,6 +17,7 @@ namespace BarCrawl.Data
             : base(options)
         {
         }
+
         public DbSet<BarCrawl.Models.Barcrawl> Barcrawl { get; set; }
         public DbSet<BarCrawl.Models.Crawl> Crawl { get; set; }
         public DbSet<BarCrawl.Models.Bar> Bar { get; set; }
